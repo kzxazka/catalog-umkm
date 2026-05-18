@@ -1,58 +1,93 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏬 Portal UMKM Indonesia (Katalog & Showcase)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem informasi dan katalog etalase digital untuk UMKM (Usaha Mikro Kecil Menengah) di bawah naungan Dinas Perdagangan. Aplikasi ini mengusung arsitektur **Multi-Tenant** di mana UMKM yang lolos verifikasi dapat memiliki "Toko Mandiri" (*storefront*) untuk mempromosikan produk mereka.
 
-## About Laravel
+Platform ini berfokus sebagai batu loncatan (*Showcase/Catalog Platform*) untuk meningkatkan *traffic* pembeli ke kanal penjualan utama masing-masing UMKM (seperti WhatsApp, Shopee, Tokopedia, dan TikTok Shop).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🛡️ Admin Dinas (Superadmin)
+- **Verifikasi UMKM**: Menyetujui atau menolak pendaftaran UMKM berdasarkan legalitas (NIB).
+- **SME Database**: Daftar lengkap seluruh UMKM terdaftar dilengkapi fitur *search*, filter *real-time* dengan Alpine.js, dan fitur *Export to CSV*.
+- **Laporan Wilayah**: Pemantauan statistik UMKM per wilayah dan fitur cetak mandiri.
 
-## Learning Laravel
+### 🏪 UMKM (Store Owner / Tenant)
+- **Dashboard Ringkasan**: Memantau statistik dasar jumlah produk.
+- **Manajemen Produk**: Sistem kelola etalase (Tambah, Edit, Hapus) menggunakan modal Alpine.js modern.
+- **Tautan Eksternal**: Integrasi langsung dengan berbagai *channel* seperti WhatsApp, Instagram, Shopee, Tokopedia, dan TikTok.
+- **Pengaturan Profil Toko**: Mengelola Nama, Kategori, Deskripsi, dan Logo Toko (NIB terenkripsi dan bersifat *read-only* jika terverifikasi).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 👥 Publik (Pengunjung)
+- **Katalog UMKM**: Penjelajahan daftar toko UMKM terverifikasi.
+- **Etalase Toko**: Halaman *landing page* spesifik untuk setiap toko (contoh: `/store/jagat-boemi`) yang menampilkan deretan produk dan link langsung ke *marketplace*.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🛠️ Tech Stack
 
-## Agentic Development
+- **Framework**: Laravel 11+ (Breeze Authentication)
+- **Database**: MongoDB (menggunakan `mongodb/laravel-mongodb`)
+- **Frontend / UI**:
+  - Tailwind CSS (Sistem Desain Kustom/Stitch Design System)
+  - Alpine.js (Untuk Interaktivitas SPA, Modal, dan AJAX)
+  - Blade Templates
+- **Lainnya**: Laravel Security (Casts Encryption) untuk mengamankan data PII (seperti NIK dan NIB).
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## ⚙️ Panduan Instalasi (Development)
 
-php artisan boost:install
-```
+Untuk menjalankan proyek ini di *local environment* menggunakan Laragon/XAMPP:
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+1. **Clone repositori**
+   ```bash
+   git clone https://github.com/kzxazka/catalog-umkm.git
+   cd catalog-umkm
+   ```
 
-## Contributing
+2. **Instal dependensi PHP & Node.js**
+   ```bash
+   composer install
+   npm install && npm run build
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Konfigurasi Environment**
+   - Salin `.env.example` menjadi `.env`.
+   - Pastikan Anda menggunakan `DB_CONNECTION=mongodb` dan sesuaikan koneksi (biasanya port `27017`).
+   - Ubah `SESSION_DRIVER=file` dan `CACHE_STORE=file` untuk mencegah *internal server error* akibat driver DB.
+   ```bash
+   php artisan key:generate
+   php artisan config:clear
+   ```
 
-## Code of Conduct
+4. **Migrasi dan Seeding Data**
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. **Jalankan Aplikasi**
+   Proyek dapat diakses melalui host virtual (misal: `http://catalog-umkm.test`) atau jalankan *development server*:
+   ```bash
+   php artisan serve
+   ```
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🔒 Akun Pengujian (Testing Accounts)
 
-## License
+Setelah menjalankan `db:seed`, gunakan akun berikut untuk mencoba sistem:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Superadmin (Admin Dinas):**
+- Email: `admin@dinas.go.id`
+- Password: `password123`
+
+**UMKM Owner:**
+- Email: `owner@jagatboemi.com`
+- Password: `password123`
+
+---
+
+*Dikembangkan dengan <3 untuk memajukan UMKM Indonesia.*
