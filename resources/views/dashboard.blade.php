@@ -1,5 +1,5 @@
 <x-app-layout>
-    @if(auth()->user()->role === 'superadmin')
+    @if(in_array(auth()->user()->role, ['admin', 'superadmin']))
         <!-- Header Section -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
             <div>
@@ -271,7 +271,7 @@
                                                             {{ $product->name }}
                                                         </div>
                                                         <div class="text-xs text-on-surface-variant mt-1">
-                                                            Rp {{ number_format($product->price ?? 0, 0, ',', '.') }}
+                                                            {{ $product->category }}
                                                         </div>
                                                     </div>
                                                 </div>

@@ -17,7 +17,7 @@ class StoreController extends Controller
             'name' => $request->owner_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'umkm',
+            'role' => 'owner',
         ]);
 
         // 2. Buat Record Toko untuk User tersebut

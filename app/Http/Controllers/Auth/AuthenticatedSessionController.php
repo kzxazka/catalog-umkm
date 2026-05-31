@@ -25,9 +25,20 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
+        $user = auth()->user();
+
+        // Redirect berdasarkan role
+        if (in_array($user->role, ['admin', 'superadmin'])) {
+            return redirect()->route('admin.verifikasi');
+        }
+
+        if ($user->role === 'buyer') {
+            return redirect()->intended(route('catalog.index'));
+        }
+
+        // UMKM Owner / Mitra
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -42,6 +53,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

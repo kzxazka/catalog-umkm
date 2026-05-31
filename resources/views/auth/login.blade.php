@@ -79,8 +79,14 @@
         </div>
     </form>
 
-    <p class="mt-10 text-center font-body-md text-body-md text-on-surface-variant">
+    <p class="mt-6 text-center font-body-md text-body-md text-on-surface-variant">
         Belum memiliki akun? <a class="text-secondary font-bold hover:underline" href="{{ route('register') }}">Daftar
             Sekarang</a>
+    </p>
+    <p class="mt-3 text-center">
+        <a href="{{ route('catalog.index') }}" class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary flex items-center justify-center gap-1 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:15px;">storefront</span>
+            Lihat Katalog Tanpa Login
+        </a>
     </p>
 </x-guest-layout>

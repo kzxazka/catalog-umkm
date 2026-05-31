@@ -25,6 +25,6 @@ class Product extends Model
     // Relasi balik: Produk ini milik toko mana?
     public function store()
     {
-        return $this->belongsTo(Store::class);
+        return $this->belongsTo(Store::class, 'store_id', '_id');
     }
 }

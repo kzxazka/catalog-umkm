@@ -14,18 +14,22 @@ class Store extends Model
     protected $collection = 'stores';
 
     protected $fillable = [
-        'user_id',     // ID UMKM yang punya toko
-        'name',        // Nama Brand (misal: Jagatboemi)
-        'slug',        // Buat URL (misal: jagat-boemi)
-        'description', // Sejarah/Tentang UMKM
-        'logo',        // Path logo toko
-        'social_links',// Array: [ 'ig' => '...', 'wa' => '...' ]
-        
+        'user_id',       // ID UMKM yang punya toko
+        'name',          // Nama Brand
+        'slug',          // Buat URL
+        'description',   // Tentang UMKM
+        'logo',          // Path logo toko
+        'header_image',  // Foto header/banner toko
+        'social_links',  // Array: [ 'instagram' => '...', 'whatsapp' => '...' ]
+        // Alamat toko — untuk filter lokasi di katalog publik
+        'address',       // Alamat lengkap
+        'city',          // Kota/Kabupaten
+        'district',      // Kecamatan
         // Data Sensitif Verifikasi
-        'nik',         // NIK Pemilik
-        'nib',         // Nomor Induk Berusaha
-        'ktp_path',    // Lokasi file KTP (Private Storage)
-        'nib_path',    // Lokasi file NIB (Private Storage)
+        'nik',           // NIK Pemilik
+        'nib',           // Nomor Induk Berusaha
+        'ktp_path',      // Lokasi file KTP
+        'nib_path',      // Lokasi file NIB
     ];
 
     // Cybersecurity: Enkripsi data sensitif di Database
