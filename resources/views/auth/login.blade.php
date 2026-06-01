@@ -57,6 +57,7 @@
             Masuk
         </button>
 
+        {{-- 
         <div class="relative flex items-center py-4">
             <div class="flex-grow border-t border-outline-variant"></div>
             <span class="flex-shrink mx-4 font-label-sm text-label-sm text-outline">Atau masuk dengan</span>
@@ -73,6 +74,7 @@
             </svg>
             <span>Google</span>
         </a>
+        --}}
     </form>
 
     <p class="mt-6 text-center font-body-md text-body-md text-on-surface-variant">
