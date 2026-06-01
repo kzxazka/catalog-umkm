@@ -15,7 +15,7 @@
                 </label>
                 <div class="flex">
                     <span class="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-outline-variant bg-surface-container-low text-on-surface-variant font-mono text-sm">+62</span>
-                    <input type="text" value="8123456789" class="flex-1 px-4 py-2 bg-surface-container border border-outline-variant rounded-r-lg text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+                    <input type="text" placeholder="8xxxxxxxxxxx" class="flex-1 px-4 py-2 bg-surface-container border border-outline-variant rounded-r-lg text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all">
                 </div>
                 <p class="text-xs text-on-surface-variant mt-1">Gunakan awalan kode negara tanpa 0 atau +</p>
             </div>
@@ -25,7 +25,7 @@
                 <label class="block text-sm font-bold text-on-surface mb-2 flex items-center gap-2">
                     <span class="material-symbols-outlined text-[#E4405F]">photo_camera</span> Instagram
                 </label>
-                <input type="url" value="https://instagram.com/jagat.boemi" class="w-full px-4 py-2 bg-surface-container border border-outline-variant rounded-lg text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+                <input type="url" placeholder="https://instagram.com/username" class="w-full px-4 py-2 bg-surface-container border border-outline-variant rounded-lg text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all">
             </div>
 
             <!-- Marketplace Links -->
