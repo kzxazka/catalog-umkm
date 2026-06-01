@@ -18,6 +18,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',         // admin | owner | buyer
+        'google_id',    // Google OAuth ID
         // Profile buyer (semua data sensitif di-encrypt)
         'nickname',     // Nama panggilan
         'phone',        // Nomor telepon
@@ -40,13 +41,70 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'phone' => 'encrypted',   // ✅ Encrypted
-            'address' => 'encrypted',   // ✅ Encrypted
-            'city' => 'encrypted',   // ✅ Encrypted
-            'district' => 'encrypted',   // ✅ Encrypted
             'favorited_products' => 'array',
             'followed_stores'    => 'array',
         ];
+    }
+
+    // Cybersecurity: Graceful Decryption Fallback to prevent crash on cleartext legacy data
+    public function getPhoneAttribute($value)
+    {
+        if (empty($value)) return $value;
+        try {
+            return decrypt($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return $value;
+        }
+    }
+
+    public function setPhoneAttribute($value)
+    {
+        $this->attributes['phone'] = empty($value) ? $value : encrypt($value);
+    }
+
+    public function getAddressAttribute($value)
+    {
+        if (empty($value)) return $value;
+        try {
+            return decrypt($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return $value;
+        }
+    }
+
+    public function setAddressAttribute($value)
+    {
+        $this->attributes['address'] = empty($value) ? $value : encrypt($value);
+    }
+
+    public function getCityAttribute($value)
+    {
+        if (empty($value)) return $value;
+        try {
+            return decrypt($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return $value;
+        }
+    }
+
+    public function setCityAttribute($value)
+    {
+        $this->attributes['city'] = empty($value) ? $value : encrypt($value);
+    }
+
+    public function getDistrictAttribute($value)
+    {
+        if (empty($value)) return $value;
+        try {
+            return decrypt($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return $value;
+        }
+    }
+
+    public function setDistrictAttribute($value)
+    {
+        $this->attributes['district'] = empty($value) ? $value : encrypt($value);
     }
 
     // Relasi: Satu User (UMKM Owner) punya satu toko

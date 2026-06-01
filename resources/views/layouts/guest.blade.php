@@ -5,7 +5,8 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Portal UMKM') }} - Login</title>
+    <title>{{ config('app.name', 'galeriukmbdl') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/disperdaglogo.png') }}" />
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap"
@@ -122,45 +123,43 @@
     <header class="bg-surface border-b border-outline-variant fixed top-0 left-0 right-0 z-50 shadow-sm">
         <nav class="flex justify-between items-center w-full px-4 md:px-10 py-3 md:py-4 max-w-screen-xl mx-auto">
             <a href="{{ route('catalog.index') }}" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <span class="material-symbols-outlined text-white" style="font-size:16px">storefront</span>
-                </div>
-                <span class="font-bold text-primary text-sm md:text-base">Portal UMKM</span>
+                <img src="{{ asset('img/disperdaglogo.png') }}" class="w-8 h-8 object-contain" alt="Logo Disperdag">
+                <span class="font-bold text-primary text-sm md:text-base">Galeri UKM BDL</span>
             </a>
             {{-- Desktop nav --}}
             <div class="hidden md:flex items-center gap-6">
-                <a class="text-sm text-on-surface-variant hover:text-secondary transition-colors font-semibold" href="{{ route('catalog.index') }}">Beranda</a>
-                <a class="text-sm text-on-surface-variant hover:text-secondary transition-colors font-semibold" href="#">Layanan</a>
+                <a class="text-sm text-on-surface-variant hover:text-secondary transition-colors font-semibold"
+                    href="{{ route('catalog.index') }}">Beranda</a>
+                <a class="text-sm text-on-surface-variant hover:text-secondary transition-colors font-semibold"
+                    href="#">Layanan</a>
                 <a class="text-sm text-primary font-bold border-b-2 border-primary pb-0.5" href="#">Bantuan</a>
             </div>
             {{-- Mobile hamburger --}}
             <button @click="mobileMenuOpen = !mobileMenuOpen"
-                    class="md:hidden w-9 h-9 rounded-lg flex items-center justify-center text-primary hover:bg-surface-container transition-colors">
-                <span class="material-symbols-outlined" x-text="mobileMenuOpen ? 'close' : 'menu'" style="font-size:22px">menu</span>
+                class="md:hidden w-9 h-9 rounded-lg flex items-center justify-center text-primary hover:bg-surface-container transition-colors">
+                <span class="material-symbols-outlined" x-text="mobileMenuOpen ? 'close' : 'menu'"
+                    style="font-size:22px">menu</span>
             </button>
         </nav>
         {{-- Mobile dropdown menu --}}
-        <div x-show="mobileMenuOpen" x-cloak
-             x-transition:enter="transition ease-out duration-150"
-             x-transition:enter-start="opacity-0 -translate-y-2"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-100"
-             x-transition:leave-start="opacity-100 translate-y-0"
-             x-transition:leave-end="opacity-0 -translate-y-2"
-             class="md:hidden bg-surface border-t border-outline-variant shadow-lg">
+        <div x-show="mobileMenuOpen" x-cloak x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
+            class="md:hidden bg-surface border-t border-outline-variant shadow-lg">
             <div class="px-4 py-3 space-y-1">
                 <a href="{{ route('catalog.index') }}" @click="mobileMenuOpen = false"
-                   class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                    class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container transition-colors">
                     <span class="material-symbols-outlined text-primary" style="font-size:18px">storefront</span>
                     Beranda / Katalog
                 </a>
                 <a href="{{ route('register') }}" @click="mobileMenuOpen = false"
-                   class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                    class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container transition-colors">
                     <span class="material-symbols-outlined text-primary" style="font-size:18px">person_add</span>
                     Daftar Akun
                 </a>
                 <a href="#" @click="mobileMenuOpen = false"
-                   class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container transition-colors">
+                    class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-on-surface hover:bg-surface-container transition-colors">
                     <span class="material-symbols-outlined text-primary" style="font-size:18px">help</span>
                     Bantuan
                 </a>
@@ -253,8 +252,12 @@
             </div>
         </div>
     </footer>
-<style>[x-cloak]{display:none!important}</style>
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] {
+            display: none !important
+        }
+    </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 
 </html>

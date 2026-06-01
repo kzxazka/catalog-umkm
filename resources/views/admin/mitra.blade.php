@@ -8,7 +8,7 @@
         <div class="flex items-center gap-2">
             <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold px-3 py-1.5 rounded-full">
                 <span class="material-symbols-outlined" style="font-size:14px">pending</span>
-                {{ $applications->where('status', 'pending')->count() }} Menunggu
+                {{ $pendingCount }} Menunggu
             </span>
         </div>
     </div>
@@ -115,15 +115,12 @@
                             </button>
 
                             @if($app->status === 'pending')
-                            {{-- Approve --}}
-                            <form method="POST" action="{{ route('admin.mitra.approve', $app->id) }}" onsubmit="return confirm('Setujui pengajuan dari {{ $user?->name }}?')">
-                                @csrf
-                                <button type="submit"
-                                        class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-700 hover:bg-green-600 hover:text-white transition-all"
-                                        title="Setujui">
-                                    <span class="material-symbols-outlined" style="font-size:16px">check_circle</span>
-                                </button>
-                            </form>
+                             {{-- Approve --}}
+                             <button onclick="showApproveModal('{{ $app->id }}', '{{ addslashes($user?->name) }}')"
+                                     class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-700 hover:bg-green-600 hover:text-white transition-all"
+                                     title="Setujui">
+                                 <span class="material-symbols-outlined" style="font-size:16px">check_circle</span>
+                             </button>
                             {{-- Reject --}}
                             <button onclick="showRejectModal('{{ $app->id }}', '{{ addslashes($user?->name) }}')"
                                     class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition-all"
@@ -173,13 +170,11 @@
             </div>
             @if($app->status === 'pending')
             <div class="flex gap-2">
-                <form method="POST" action="{{ route('admin.mitra.approve', $app->id) }}" class="flex-1" onsubmit="return confirm('Setujui pengajuan ini?')">
-                    @csrf
-                    <button type="submit" class="w-full py-2.5 rounded-xl bg-green-600 text-white text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5">
-                        <span class="material-symbols-outlined" style="font-size:14px">check_circle</span>
-                        Setujui
-                    </button>
-                </form>
+                <button onclick="showApproveModal('{{ $app->id }}', '{{ addslashes($user?->name) }}')"
+                        class="flex-1 py-2.5 rounded-xl bg-green-600 text-white text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5">
+                    <span class="material-symbols-outlined" style="font-size:14px">check_circle</span>
+                    Setujui
+                </button>
                 <button onclick="showRejectModal('{{ $app->id }}', '{{ addslashes($user?->name) }}')"
                         class="flex-1 py-2.5 rounded-xl border-2 border-error text-error text-xs font-bold hover:bg-error hover:text-white transition-all flex items-center justify-center gap-1.5">
                     <span class="material-symbols-outlined" style="font-size:14px">cancel</span>
@@ -203,6 +198,46 @@
         <p class="text-sm text-on-surface-variant">Belum ada buyer yang mendaftar sebagai mitra.</p>
     </div>
     @endif
+
+    {{-- MODAL: Approve --}}
+    <div id="approve-modal" class="hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/50" onclick="closeApproveModal()"></div>
+        <div class="relative bg-white w-full sm:w-96 rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+            <div class="bg-green-600 px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-white" style="font-size:20px">verified</span>
+                    <h3 class="text-white font-bold text-sm">Setujui Pengajuan</h3>
+                </div>
+                <button onclick="closeApproveModal()" class="text-white/70 hover:text-white">
+                    <span class="material-symbols-outlined" style="font-size:20px">close</span>
+                </button>
+            </div>
+            <div class="p-5">
+                <div class="text-center py-2 mb-4">
+                    <div class="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center mx-auto mb-3">
+                        <span class="material-symbols-outlined" style="font-size:32px">check_circle</span>
+                    </div>
+                    <p class="text-sm font-bold text-on-surface">Konfirmasi Persetujuan</p>
+                    <p class="text-xs text-on-surface-variant mt-1.5 leading-relaxed">
+                        Anda yakin ingin menyetujui pengajuan mitra dari <strong id="approve-applicant-name">-</strong>? Tindakan ini akan secara resmi mendaftarkan mereka sebagai tenant di platform.
+                    </p>
+                </div>
+                <form id="approve-form" method="POST">
+                    @csrf
+                    <div class="flex gap-3">
+                        <button type="button" onclick="closeApproveModal()"
+                                class="flex-1 py-2.5 rounded-xl border border-outline-variant text-on-surface font-bold text-xs hover:bg-surface-container transition-colors">
+                            Batal
+                        </button>
+                        <button type="submit"
+                                class="flex-1 py-2.5 rounded-xl bg-green-600 text-white font-bold text-xs hover:bg-green-700 transition-colors shadow-md shadow-green-200">
+                            Setujui
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     {{-- MODAL: Reject --}}
     <div id="reject-modal" class="hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4">
@@ -256,6 +291,14 @@
     </div>
 
     <script>
+    function showApproveModal(id, name) {
+        document.getElementById('approve-form').action = `/admin/mitra/${id}/approve`;
+        document.getElementById('approve-applicant-name').textContent = name;
+        document.getElementById('approve-modal').classList.remove('hidden');
+    }
+    function closeApproveModal() {
+        document.getElementById('approve-modal').classList.add('hidden');
+    }
     function showRejectModal(id, name) {
         document.getElementById('reject-form').action = `/admin/mitra/${id}/reject`;
         document.getElementById('reject-applicant-name').textContent = name;

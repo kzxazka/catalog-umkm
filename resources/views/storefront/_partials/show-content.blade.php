@@ -156,11 +156,16 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 @foreach($topProducts as $p)
                 <a href="{{ route('store.product', ['slug' => $store->slug, 'id' => $p->id]) }}"
-                   class="bg-white rounded-2xl border border-outline-variant overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                   class="bg-white rounded-2xl border border-outline-variant overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group"
+                   x-data="{ imgLoaded: false }">
                     <div class="relative aspect-square overflow-hidden bg-surface-container">
                         @if(!empty($p->images))
+                        <div x-show="!imgLoaded" class="absolute inset-0 shimmer-bg z-10"></div>
                         <img src="{{ asset('storage/products/'.$p->images[0]) }}" alt="{{ $p->name }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                             @load="imgLoaded = true"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                             :class="imgLoaded ? 'opacity-100' : 'opacity-0'" loading="lazy"
+                             onerror="imgLoaded = true" />
                         @else
                         <div class="w-full h-full flex items-center justify-center">
                             <span class="material-symbols-outlined text-outline-variant" style="font-size:28px">image</span>
@@ -192,11 +197,16 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 @foreach($allProducts->take(8) as $p)
                 <a href="{{ route('store.product', ['slug' => $store->slug, 'id' => $p->id]) }}"
-                   class="bg-white rounded-2xl border border-outline-variant overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group">
-                    <div class="aspect-square overflow-hidden bg-surface-container">
+                   class="bg-white rounded-2xl border border-outline-variant overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group"
+                   x-data="{ imgLoaded: false }">
+                    <div class="relative aspect-square overflow-hidden bg-surface-container">
                         @if(!empty($p->images))
+                        <div x-show="!imgLoaded" class="absolute inset-0 shimmer-bg z-10"></div>
                         <img src="{{ asset('storage/products/'.$p->images[0]) }}" alt="{{ $p->name }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                             @load="imgLoaded = true"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                             :class="imgLoaded ? 'opacity-100' : 'opacity-0'" loading="lazy"
+                             onerror="imgLoaded = true" />
                         @else
                         <div class="w-full h-full flex items-center justify-center">
                             <span class="material-symbols-outlined text-outline-variant" style="font-size:28px">image</span>
@@ -254,11 +264,16 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             @foreach($products as $product)
             <a href="{{ route('store.product', ['slug' => $store->slug, 'id' => $product->id]) }}"
-               class="bg-white rounded-2xl border border-outline-variant overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group">
+               class="bg-white rounded-2xl border border-outline-variant overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group"
+               x-data="{ imgLoaded: false }">
                 <div class="relative aspect-square overflow-hidden bg-surface-container">
                     @if(!empty($product->images))
+                    <div x-show="!imgLoaded" class="absolute inset-0 shimmer-bg z-10"></div>
                     <img src="{{ asset('storage/products/'.$product->images[0]) }}" alt="{{ $product->name }}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                         @load="imgLoaded = true"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                         :class="imgLoaded ? 'opacity-100' : 'opacity-0'" loading="lazy"
+                         onerror="imgLoaded = true" />
                     @else
                     <div class="w-full h-full flex items-center justify-center">
                         <span class="material-symbols-outlined text-outline-variant" style="font-size:28px">image</span>

@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>{{ $title ?? 'Portal UMKM' }}</title>
+    <title>{{ $title ?? 'galeriukmbdl' }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/disperdaglogo.png') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -50,6 +51,16 @@
         @keyframes popIn { from { opacity: 0; transform: scale(.95) translateY(-4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         /* Bottom nav safe area */
         .bottom-safe { padding-bottom: env(safe-area-inset-bottom, 8px); }
+        /* Premium Shimmer Loading Skeleton */
+        .shimmer-bg {
+            background: linear-gradient(90deg, #eff4ff 25%, #d3e4fe 50%, #eff4ff 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.6s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
     {{ $head ?? '' }}
 </head>
@@ -74,12 +85,10 @@
 
         {{-- Brand --}}
         <a href="{{ route('catalog.index') }}" class="flex items-center gap-2.5 shrink-0">
-            <div class="w-8 h-8 md:w-9 md:h-9 bg-white/15 rounded-lg flex items-center justify-center">
-                <span class="material-symbols-outlined text-white" style="font-size:18px">storefront</span>
-            </div>
-            <div class="hidden sm:block">
-                <span class="text-white font-bold text-sm leading-tight block">Portal UMKM</span>
-                <span class="text-blue-200 text-[10px]">Dinas Perdagangan</span>
+            <img src="{{ asset('img/disperdaglogo.png') }}" class="w-8 h-8 md:w-9 md:h-9 object-contain" alt="Logo Disperdag">
+            <div>
+                <span class="text-white font-bold text-sm leading-tight block">Galeri UKM BDL</span>
+                <span class="text-blue-200 text-[10px]">Dinas Perdagangan Kota Bandar Lampung</span>
             </div>
         </a>
 

@@ -19,6 +19,7 @@ Route::redirect('/', '/catalog');
 // ================================================================
 Route::get('/catalog', [PublicCatalogController::class, 'index'])->name('catalog.index');
 Route::get('/catalog/product/{id}', [PublicCatalogController::class, 'show'])->name('catalog.product');
+Route::get('/events/{id}', [\App\Http\Controllers\PublicEventController::class, 'show'])->name('events.show');
 
 // Toko per UMKM
 Route::get('/store/{slug}', [PublicStoreController::class, 'show'])->name('store.public');
@@ -102,16 +103,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/sme-database/export', [AdminController::class, 'exportSmeCsv'])->name('admin.sme_database.export');
     Route::get('/admin/laporan', [AdminController::class, 'laporan'])->name('admin.laporan');
     Route::get('/admin/api/stores', [AdminController::class, 'getStores'])->name('admin.api.stores');
+    Route::get('/admin/api/applications', [AdminController::class, 'getApplications'])->name('admin.api.applications');
+    Route::get('/admin/mitra/{id}/document/{type}', [AdminController::class, 'viewDocument'])->name('admin.mitra.document');
 
     // Admin: Mitra Applications
     Route::get('/admin/mitra', [MitraController::class, 'adminList'])->name('admin.mitra');
     Route::post('/admin/mitra/{id}/approve', [MitraController::class, 'approve'])->name('admin.mitra.approve');
     Route::post('/admin/mitra/{id}/reject', [MitraController::class, 'reject'])->name('admin.mitra.reject');
+    Route::post('/admin/mitra/{id}/revision', [MitraController::class, 'revision'])->name('admin.mitra.revision');
+
+    // Admin: Event Management CRUD
+    Route::get('/admin/events', [\App\Http\Controllers\AdminEventController::class, 'index'])->name('admin.events.index');
+    Route::get('/admin/events/create', [\App\Http\Controllers\AdminEventController::class, 'create'])->name('admin.events.create');
+    Route::post('/admin/events', [\App\Http\Controllers\AdminEventController::class, 'store'])->name('admin.events.store');
+    Route::get('/admin/events/{id}/edit', [\App\Http\Controllers\AdminEventController::class, 'edit'])->name('admin.events.edit');
+    Route::post('/admin/events/{id}', [\App\Http\Controllers\AdminEventController::class, 'update'])->name('admin.events.update');
+    Route::delete('/admin/events/{id}', [\App\Http\Controllers\AdminEventController::class, 'destroy'])->name('admin.events.destroy');
 
     // ── OWNER (UMKM) ──────────────────────────────────────────
+    Route::resource('products', ProductController::class);
     Route::get('/owner/products', [\App\Http\Controllers\OwnerController::class, 'products'])->name('owner.products');
     Route::get('/owner/links', [\App\Http\Controllers\OwnerController::class, 'links'])->name('owner.links');
     Route::get('/owner/settings', [\App\Http\Controllers\OwnerController::class, 'settings'])->name('owner.settings');
+    Route::post('/owner/settings', [\App\Http\Controllers\OwnerController::class, 'updateSettings'])->name('owner.settings.update');
 
     // Owner: Product Inquiries
     Route::get('/owner/inquiries', [ProductInquiryController::class, 'ownerList'])->name('owner.inquiries');

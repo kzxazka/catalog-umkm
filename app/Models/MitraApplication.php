@@ -35,6 +35,37 @@ class MitraApplication extends Model
         ];
     }
 
+    // Cybersecurity: Graceful Decryption Fallback to prevent crash on cleartext legacy data
+    public function getWhatsappAttribute($value)
+    {
+        if (empty($value)) return $value;
+        try {
+            return decrypt($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return $value;
+        }
+    }
+
+    public function setWhatsappAttribute($value)
+    {
+        $this->attributes['whatsapp'] = empty($value) ? $value : encrypt($value);
+    }
+
+    public function getInstagramAttribute($value)
+    {
+        if (empty($value)) return $value;
+        try {
+            return decrypt($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return $value;
+        }
+    }
+
+    public function setInstagramAttribute($value)
+    {
+        $this->attributes['instagram'] = empty($value) ? $value : encrypt($value);
+    }
+
     // Relasi ke User (buyer)
     public function user()
     {

@@ -56,9 +56,9 @@
         </h2>
         <div class="space-y-3">
             @foreach([
-                ['1', 'Isi formulir pendaftaran dengan data usaha dan dokumen lengkap', 'edit_document'],
-                ['2', 'Tim Dinas Perdagangan meninjau dalam 3–5 hari kerja', 'manage_search'],
-                ['3', 'Jika disetujui, akun toko akan dibuat dan Anda bisa mengelola katalog', 'storefront'],
+                ['1', 'Isi formulir pendaftaran dengan informasi usaha Anda di Bandar Lampung', 'edit_document'],
+                ['2', 'Tim Dinas Perdagangan akan meninjau lokasi & profil usaha Anda', 'manage_search'],
+                ['3', 'Setelah disetujui, akun toko mandiri Anda akan dibuat otomatis', 'storefront'],
             ] as [$no, $text, $icon])
             <div class="flex items-start gap-3">
                 <div class="w-7 h-7 rounded-full bg-primary flex items-center justify-center shrink-0">
@@ -70,11 +70,22 @@
         </div>
     </div>
 
+    {{-- INFO BANNER --}}
+    <div class="mb-5 flex items-start gap-3 bg-primary-container/20 border border-primary/20 rounded-2xl p-4">
+        <span class="material-symbols-outlined text-primary text-2xl shrink-0">info</span>
+        <div>
+            <h4 class="text-sm font-bold text-primary mb-1">Persyaratan Mitra UMKM</h4>
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+                Berdomisili di Kota Bandar Lampung
+            </p>
+        </div>
+    </div>
+
     {{-- FORM --}}
     <div class="bg-white border border-outline-variant rounded-2xl p-6">
         <h2 class="text-base font-bold text-on-surface mb-5">Formulir Pendaftaran Mitra</h2>
 
-        <form method="POST" action="{{ route('mitra.store') }}" enctype="multipart/form-data" class="space-y-5">
+        <form method="POST" action="{{ route('mitra.store') }}" class="space-y-5">
             @csrf
 
             {{-- Data Usaha --}}
@@ -93,7 +104,7 @@
                         <select name="business_category" required
                                 class="w-full px-3 py-2.5 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm bg-white">
                             <option value="">-- Pilih Kategori --</option>
-                            @foreach(['Fashion & Pakaian','Kuliner & Makanan','Kerajinan & Handmade','Aksesoris & Perhiasan','Kecantikan & Kosmetik','Pertanian & Herbal','Elektronik & Gadget','Lainnya'] as $cat)
+                            @foreach(['Fashion','Food & Beverage','Healthy Product','Other'] as $cat)
                             <option value="{{ $cat }}" {{ old('business_category') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
                             @endforeach
                         </select>
@@ -123,15 +134,14 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-on-surface mb-1.5">Kota/Kabupaten <span class="text-error">*</span></label>
-                            <input type="text" name="city" value="{{ old('city') }}" required
-                                   placeholder="Contoh: Surabaya"
-                                   class="w-full px-3 py-2.5 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm" />
+                            <input type="text" name="city" value="Bandar Lampung" readonly required
+                                   class="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-surface-container-high text-on-surface-variant cursor-not-allowed outline-none text-sm font-bold" />
                             <x-input-error :messages="$errors->get('city')" class="mt-1 text-xs" />
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-on-surface mb-1.5">Kecamatan <span class="text-error">*</span></label>
                             <input type="text" name="district" value="{{ old('district') }}" required
-                                   placeholder="Contoh: Wonokromo"
+                                   placeholder="Contoh: Kedaton"
                                    class="w-full px-3 py-2.5 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm" />
                             <x-input-error :messages="$errors->get('district')" class="mt-1 text-xs" />
                         </div>
@@ -156,43 +166,6 @@
                                placeholder="https://instagram.com/nama_usaha"
                                class="w-full px-3 py-2.5 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm" />
                     </div>
-                </div>
-            </div>
-
-            {{-- Dokumen --}}
-            <div>
-                <p class="text-xs font-bold text-secondary uppercase tracking-wider mb-3">Dokumen Persyaratan</p>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-on-surface mb-1.5">Foto KTP Pemilik <span class="text-error">*</span></label>
-                        <label class="flex items-center gap-3 p-3 border-2 border-dashed border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-colors">
-                            <span class="material-symbols-outlined text-primary">upload_file</span>
-                            <div>
-                                <p class="text-sm font-semibold text-on-surface" id="ktp-label">Pilih file KTP</p>
-                                <p class="text-xs text-on-surface-variant">JPG, PNG, atau PDF — Maks. 5MB</p>
-                            </div>
-                            <input type="file" name="ktp_file" required accept=".jpg,.jpeg,.png,.pdf"
-                                   class="hidden" onchange="updateLabel(this, 'ktp-label')" />
-                        </label>
-                        <x-input-error :messages="$errors->get('ktp_file')" class="mt-1 text-xs" />
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-on-surface mb-1.5">NIB / Sertifikat Usaha <span class="text-error">*</span></label>
-                        <label class="flex items-center gap-3 p-3 border-2 border-dashed border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-colors">
-                            <span class="material-symbols-outlined text-primary">upload_file</span>
-                            <div>
-                                <p class="text-sm font-semibold text-on-surface" id="nib-label">Pilih file NIB</p>
-                                <p class="text-xs text-on-surface-variant">JPG, PNG, atau PDF — Maks. 5MB</p>
-                            </div>
-                            <input type="file" name="nib_file" required accept=".jpg,.jpeg,.png,.pdf"
-                                   class="hidden" onchange="updateLabel(this, 'nib-label')" />
-                        </label>
-                        <x-input-error :messages="$errors->get('nib_file')" class="mt-1 text-xs" />
-                    </div>
-                </div>
-                <div class="flex items-start gap-2 p-3 bg-surface-container-low rounded-lg mt-3">
-                    <span class="material-symbols-outlined text-primary mt-0.5" style="font-size:14px">security</span>
-                    <p class="text-xs text-on-surface-variant">Dokumen Anda disimpan secara <strong>rahasia</strong> di server aman dan hanya dapat diakses oleh petugas Dinas Perdagangan yang berwenang.</p>
                 </div>
             </div>
 

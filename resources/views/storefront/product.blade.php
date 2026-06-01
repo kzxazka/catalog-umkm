@@ -61,9 +61,7 @@
                     <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-tight mb-4">
                         {{ $product->name }}
                     </h1>
-                    <p class="text-3xl font-bold text-gray-900 mb-8">
-                        Rp {{ number_format($product->price ?? 0, 0, ',', '.') }}
-                    </p>
+
                     
                     <div class="prose max-w-none text-gray-600 mb-10 leading-relaxed text-lg">
                         <p>{{ $product->description }}</p>

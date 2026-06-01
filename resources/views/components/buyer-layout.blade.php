@@ -7,7 +7,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>{{ $title ?? config('app.name', 'Portal UMKM') }}</title>
+    <title>{{ $title ?? config('app.name', 'galeriukmbdl') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/disperdaglogo.png') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -80,11 +81,9 @@
 
         {{-- Brand --}}
         <a href="{{ route('catalog.index') }}" class="flex items-center gap-2 shrink-0">
-            <div class="w-8 h-8 bg-white/15 rounded-lg flex items-center justify-center">
-                <span class="material-symbols-outlined text-white" style="font-size:18px">storefront</span>
-            </div>
-            <div class="hidden sm:block">
-                <span class="text-white font-bold text-sm leading-none block">Portal UMKM</span>
+            <img src="{{ asset('img/disperdaglogo.png') }}" class="w-8 h-8 object-contain" alt="Logo Disperdag">
+            <div>
+                <span class="text-white font-bold text-sm leading-none block">galeriukmbdl</span>
                 <span class="text-blue-200 text-[10px]">Dinas Perdagangan</span>
             </div>
         </a>

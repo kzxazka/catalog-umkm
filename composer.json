@@ -10,6 +10,7 @@
         "google/cloud-video-stitcher": "^1.2",
         "intervention/image": "^4.1",
         "laravel/framework": "^13.8",
+        "laravel/socialite": "*",
         "laravel/tinker": "^3.0",
         "mongodb/laravel-mongodb": "^5.7"
     },

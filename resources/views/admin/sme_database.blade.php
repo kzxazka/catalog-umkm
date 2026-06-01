@@ -124,7 +124,7 @@
                 stores: [],
                 searchQuery: '',
                 activeCategory: 'Semua',
-                categories: ['Semua', 'Kuliner', 'Fashion', 'Kriya & Kerajinan', 'Jasa', 'Lainnya'],
+                categories: ['Semua', 'Fashion', 'Food & Beverage', 'Healthy Product', 'Other'],
                 isLoading: true,
                 pagination: {},
                 
@@ -147,7 +147,7 @@
                         const response = await fetch(url);
                         const data = await response.json();
                         
-                        this.stores = data.data; // Laravel pagination object holds data in .data
+                        this.stores = data.data; // Framework pagination object holds data in .data
                         this.pagination = {
                             current_page: data.current_page,
                             last_page: data.last_page,

@@ -65,10 +65,10 @@ class StoreSeeder extends Seeder
 
         // 4. Buat UMKM Dummy tambahan untuk test Filter & Pagination
         $dummyStores = [
-            ['name' => 'Kopi Kenangan Senja', 'slug' => 'kopi-kenangan-senja', 'category' => 'Kuliner', 'nib' => '8273910283712'],
-            ['name' => 'Kriya Rotan Nusantara', 'slug' => 'kriya-rotan', 'category' => 'Kriya & Kerajinan', 'nib' => '1029384756123'],
-            ['name' => 'Servis AC Mandiri', 'slug' => 'servis-ac', 'category' => 'Jasa', 'nib' => ''],
-            ['name' => 'Pempek Cek Lina', 'slug' => 'pempek-cek-lina', 'category' => 'Kuliner', 'nib' => '5647382910394'],
+            ['name' => 'Kopi Kenangan Senja', 'slug' => 'kopi-kenangan-senja', 'category' => 'Food & Beverage', 'nib' => '8273910283712'],
+            ['name' => 'Kriya Rotan Nusantara', 'slug' => 'kriya-rotan', 'category' => 'Other', 'nib' => '1029384756123'],
+            ['name' => 'Servis AC Mandiri', 'slug' => 'servis-ac', 'category' => 'Other', 'nib' => ''],
+            ['name' => 'Pempek Cek Lina', 'slug' => 'pempek-cek-lina', 'category' => 'Food & Beverage', 'nib' => '5647382910394'],
             ['name' => 'Kaos Polos Lampung', 'slug' => 'kaos-polos-lampung', 'category' => 'Fashion', 'nib' => '9081726354123'],
         ];
 

@@ -160,7 +160,7 @@
                 <h2 class="text-3xl font-bold text-primary mb-2">Halo, {{ Auth::user()->name }}</h2>
                 <p class="text-on-surface-variant">Kelola katalog digital dan jangkauan media sosial Anda.</p>
             </div>
-            <a href="{{ route('owner.products') }}" class="bg-secondary text-on-secondary px-6 py-3 rounded-lg text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-opacity shadow-sm">
+            <a href="{{ route('products.create') }}" class="bg-secondary text-on-secondary px-6 py-3 rounded-lg text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-opacity shadow-sm">
                 <span class="material-symbols-outlined">add</span>
                 Tambah Produk Baru
             </a>
@@ -230,7 +230,7 @@
                 <div class="lg:col-span-2 space-y-6">
                     <div class="flex justify-between items-center">
                         <h3 class="text-xl font-bold text-primary">Insight Produk Detail</h3>
-                        <a href="{{ route('owner.products') }}" class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
+                        <a href="{{ route('products.index') }}" class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
                             Kelola Produk <span class="material-symbols-outlined text-[16px]">chevron_right</span>
                         </a>
                     </div>

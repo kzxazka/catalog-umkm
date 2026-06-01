@@ -37,7 +37,7 @@
                             <div class="p-4">
                                 <h3 class="font-bold text-lg dark:text-white truncate" title="{{ $product->name }}">{{ $product->name }}</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">{{ $product->category ?? 'Tanpa Kategori' }}</p>
-                                <p class="text-indigo-600 font-bold mb-4">Rp {{ number_format($product->price ?? 0, 0, ',', '.') }}</p>
+
                                 
                                 <div class="flex gap-2">
                                     <a href="{{ route('products.edit', $product->id) }}" class="flex-1 text-center bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-300 px-3 py-1.5 rounded text-sm font-medium transition">Edit</a>

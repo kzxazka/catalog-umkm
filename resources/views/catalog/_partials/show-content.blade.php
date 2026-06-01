@@ -147,65 +147,86 @@
             </div>
         </div>
 
-        {{-- ═══════════ TANYA PRODUK ═══════════ --}}
-        @auth
-        <div class="bg-white rounded-2xl border border-outline-variant p-5 mb-5" x-data="{ selectedKey: '', question: '' }">
+        {{-- ═══════════ TANYA JAWAB PRODUK (Q&A) ═══════════ --}}
+        <div class="bg-white rounded-2xl border border-outline-variant p-5 mb-5">
             <h2 class="font-bold text-sm text-on-surface mb-4 flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary" style="font-size:18px">forum</span>
-                Tanya Tentang Produk Ini
+                Tanya Jawab Produk
             </h2>
-            <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">Pilih Template Pertanyaan</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-                @foreach($questionTemplates as $key => $text)
-                <button type="button"
-                        @click="selectedKey = '{{ $key }}'; question = '{{ addslashes($text) }}'"
-                        :class="selectedKey === '{{ $key }}' ? 'border-primary text-primary bg-surface-container-low' : 'border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary'"
-                        class="text-left px-3 py-2.5 border rounded-xl text-xs font-semibold transition-all leading-tight">
-                    {{ $text }}
-                </button>
-                @endforeach
-            </div>
-            <form method="POST" action="{{ route('inquiry.store', $product->id) }}">
-                @csrf
-                <input type="hidden" name="template_key" :value="selectedKey" />
-                <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">Atau Tulis Sendiri</p>
-                <textarea name="question" x-model="question" rows="3" required
-                          placeholder="Tulis pertanyaan Anda..."
-                          class="w-full px-3 py-2.5 border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm resize-none transition-all font-sans mb-3"></textarea>
-                <button type="submit"
-                        class="w-full bg-primary text-white py-3 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity">
-                    Kirim Pertanyaan
-                </button>
-            </form>
+
+            {{-- List Pertanyaan Yang Sudah Dijawab (Bisa dilihat oleh semua pengunjung/guest) --}}
             @if($inquiries->isNotEmpty())
-            <div class="mt-5 pt-4 border-t border-surface-container-high">
-                <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">Pertanyaan Lain</p>
+            <div class="space-y-4 mb-5">
                 @foreach($inquiries as $inq)
-                <div class="mb-3 last:mb-0">
-                    <div class="flex items-start gap-2 mb-1.5">
+                <div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-3.5">
+                    <div class="flex items-start gap-2.5 mb-2">
                         <span class="bg-primary text-white text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 mt-0.5">Q</span>
-                        <p class="text-xs font-semibold text-on-surface">{{ $inq->question }}</p>
+                        <p class="text-xs font-bold text-on-surface leading-normal">{{ $inq->question }}</p>
                     </div>
-                    <div class="flex items-start gap-2">
-                        <span class="bg-surface-container text-primary text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 mt-0.5">A</span>
-                        <p class="text-xs text-on-surface-variant">{{ $inq->reply }}</p>
+                    @if($inq->reply)
+                    <div class="flex items-start gap-2.5 pl-6 border-l-2 border-primary/20">
+                        <span class="bg-secondary text-white text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 mt-0.5">A</span>
+                        <div class="flex-1">
+                            <p class="text-xs text-on-surface-variant leading-normal">{{ $inq->reply }}</p>
+                            <p class="text-[9px] text-on-surface-variant/80 mt-1">Dibalas oleh pemilik toko</p>
+                        </div>
                     </div>
+                    @else
+                    <div class="flex items-start gap-2.5 pl-6 border-l-2 border-outline-variant/60">
+                        <span class="bg-surface-container text-on-surface-variant text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 mt-0.5">A</span>
+                        <p class="text-xs text-on-surface-variant/70 italic leading-normal">Belum ada jawaban dari toko.</p>
+                    </div>
+                    @endif
                 </div>
                 @endforeach
             </div>
-            @endif
-        </div>
-        @else
-        <div class="bg-surface-container-low border border-outline-variant rounded-2xl p-6 mb-5 text-center">
-            <span class="material-symbols-outlined text-primary block mb-2" style="font-size:36px">help</span>
-            <p class="font-bold text-sm text-on-surface mb-1">Punya pertanyaan tentang produk ini?</p>
-            <p class="text-xs text-on-surface-variant mb-4">Login atau daftar untuk mengirim pertanyaan langsung ke pemilik toko.</p>
-            <div class="flex gap-2 justify-center">
-                <a href="{{ route('register') }}" class="bg-secondary text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:opacity-90 transition-opacity">Daftar Gratis</a>
-                <a href="{{ route('login') }}" class="border border-primary text-primary px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-primary hover:text-white transition-all">Masuk</a>
+            @else
+            <div class="text-center py-6 text-on-surface-variant border border-dashed border-outline-variant rounded-xl mb-5">
+                <span class="material-symbols-outlined text-3xl opacity-40 mb-1">inbox</span>
+                <p class="text-xs font-semibold">Belum ada pertanyaan tentang produk ini.</p>
+                <p class="text-[10px] opacity-75">Jadilah yang pertama untuk bertanya!</p>
             </div>
+            @endif
+
+            {{-- Form Bertanya (Hanya untuk yang sudah login) --}}
+            @auth
+            <div x-data="{ selectedKey: '', question: '' }" class="border-t border-outline-variant/60 pt-4">
+                <h3 class="font-bold text-xs text-on-surface mb-3">Tanyakan Sesuatu</h3>
+                <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">Pilih Template Pertanyaan</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                    @foreach($questionTemplates as $key => $text)
+                    <button type="button"
+                            @click="selectedKey = '{{ $key }}'; question = '{{ addslashes($text) }}'"
+                            :class="selectedKey === '{{ $key }}' ? 'border-primary text-primary bg-primary/5' : 'border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary'"
+                            class="text-left px-3 py-2 border rounded-xl text-xs font-semibold transition-all leading-tight">
+                        {{ $text }}
+                    </button>
+                    @endforeach
+                </div>
+                <form method="POST" action="{{ route('inquiry.store', $product->id) }}">
+                    @csrf
+                    <input type="hidden" name="template_key" :value="selectedKey" />
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">Atau Tulis Sendiri</p>
+                    <textarea name="question" x-model="question" rows="3" required
+                              placeholder="Tulis pertanyaan Anda di sini..."
+                              class="w-full px-3 py-2.5 border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm resize-none transition-all font-sans mb-3"></textarea>
+                    <button type="submit"
+                            class="w-full bg-primary text-white py-2.5 rounded-xl text-xs font-bold hover:opacity-90 transition-opacity">
+                        Kirim Pertanyaan
+                    </button>
+                </form>
+            </div>
+            @else
+            <div class="border-t border-outline-variant/60 pt-4 text-center">
+                <p class="font-bold text-xs text-on-surface mb-1">Ingin bertanya tentang produk ini?</p>
+                <p class="text-[11px] text-on-surface-variant mb-3">Silakan masuk atau daftar akun Pengunjung/Buyer untuk bertanya langsung kepada pemilik toko.</p>
+                <div class="flex gap-2 justify-center">
+                    <a href="{{ route('register') }}" class="bg-secondary text-white px-4 py-2 rounded-xl text-xs font-bold hover:opacity-90 transition-opacity">Daftar Gratis</a>
+                    <a href="{{ route('login') }}" class="border border-primary text-primary px-4 py-2 rounded-xl text-xs font-bold hover:bg-primary hover:text-white transition-all">Masuk</a>
+                </div>
+            </div>
+            @endauth
         </div>
-        @endauth
 
         {{-- ═══════════ RELATED PRODUCTS ═══════════ --}}
         @if($related->isNotEmpty())

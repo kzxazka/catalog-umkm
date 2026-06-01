@@ -100,6 +100,65 @@
     </div>
     @endguest
 
+    {{-- ═══════════ EVENT BANNER / SECTIONS ═══════════ --}}
+    @if(isset($events) && $events->isNotEmpty())
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-sm font-black uppercase tracking-wider text-on-surface flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-primary rounded-full animate-pulse"></span>
+                Event & Agenda Dinas Perdagangan
+            </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            @foreach($events as $event)
+            <a href="{{ route('events.show', $event->id) }}" 
+               class="bg-white rounded-2xl border border-outline-variant/60 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col sm:flex-row h-full group">
+                
+                {{-- Event Image/Banner --}}
+                <div class="w-full sm:w-40 aspect-[16/9] sm:aspect-square bg-surface-container shrink-0 overflow-hidden relative border-b sm:border-b-0 sm:border-r border-outline-variant/40">
+                    @if($event->image)
+                        <img src="{{ asset('storage/events/' . $event->image) }}" 
+                             alt="{{ $event->title }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-on-surface-variant/40">
+                            <span class="material-symbols-outlined text-3xl">campaign</span>
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Event Info --}}
+                <div class="p-4 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+                            <span class="inline-flex items-center gap-0.5 text-[9px] font-black text-primary bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 uppercase tracking-widest">
+                                <span class="material-symbols-outlined" style="font-size:11px">calendar_today</span>
+                                {{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('d M Y') }}
+                            </span>
+                            <span class="inline-flex items-center gap-0.5 text-[9px] font-black text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full uppercase tracking-widest">
+                                <span class="material-symbols-outlined" style="font-size:11px">location_on</span>
+                                {{ Str::limit($event->location, 18) }}
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-xs sm:text-sm uppercase text-on-surface tracking-tight group-hover:text-primary transition-colors leading-snug line-clamp-2 mb-2">
+                            {{ $event->title }}
+                        </h3>
+                        <p class="text-[10px] sm:text-xs text-on-surface-variant/80 line-clamp-2 leading-relaxed">
+                            {{ strip_tags($event->description) }}
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-between mt-3 pt-2.5 border-t border-outline-variant/40">
+                        <span class="text-[9px] font-black text-primary uppercase tracking-wider flex items-center gap-0.5">
+                            Detail Informasi <span class="material-symbols-outlined" style="font-size:12px">arrow_right_alt</span>
+                        </span>
+                    </div>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     {{-- ═══════════ HEADER COUNTS ═══════════ --}}
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-sm font-bold text-on-surface">
@@ -146,14 +205,18 @@
             @endif
             @endauth
 
-            <a href="{{ route('catalog.product', $product->id) }}" class="block">
+            <a href="{{ route('catalog.product', $product->id) }}" class="block" x-data="{ imgLoaded: false }">
                 <div class="relative aspect-square bg-surface-container overflow-hidden">
                     @if(!empty($product->images))
+                        {{-- Shimmer skeleton overlay --}}
+                        <div x-show="!imgLoaded" class="absolute inset-0 shimmer-bg"></div>
                         <img src="{{ asset('storage/products/'.$product->images[0]) }}"
                              alt="{{ $product->name }}"
                              loading="lazy"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                             onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-surface-container-high\'><span class=\'material-symbols-outlined text-outline-variant\' style=\'font-size:28px\'>image</span></div>'" />
+                             @load="imgLoaded = true"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                             :class="imgLoaded ? 'opacity-100' : 'opacity-0'"
+                             onerror="imgLoaded = true; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-surface-container-high\'><span class=\'material-symbols-outlined text-outline-variant\' style=\'font-size:28px\'>image</span></div>'" />
                     @else
                     <div class="w-full h-full flex items-center justify-center bg-surface-container-high">
                         <span class="material-symbols-outlined text-outline-variant" style="font-size:28px">image</span>

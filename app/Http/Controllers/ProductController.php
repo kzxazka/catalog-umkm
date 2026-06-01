@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\WebpEncoder;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -20,7 +22,7 @@ class ProductController extends Controller
         }
 
         // Filter berdasarkan store_id
-        $products = Product::where('store_id', $store->id)->latest()->get();
+        $products = Product::where('store_id', $store->id)->orderBy('_id', -1)->get();
         return view('products.index', compact('products'));
     }
 
@@ -35,15 +37,26 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'photos' => 'required|array|min:3',
             'photos.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120', // Max 5MB
+        ], [
+            'photos.required' => 'Foto produk wajib diunggah.',
+            'photos.array' => 'Format foto produk tidak valid.',
+            'photos.min' => 'Wajib mengunggah minimal 3 foto produk agar bisa ditampilkan dalam slider di katalog.',
+            'photos.*.image' => 'File harus berupa gambar.',
+            'photos.*.mimes' => 'Format gambar harus jpeg, png, jpg, atau webp.',
+            'photos.*.max' => 'Ukuran maksimal tiap gambar adalah 5MB.',
         ]);
 
         $images = [];
         if($request->hasFile('photos')) {
             // Pastikan direktori ada
-            if (!Storage::exists('public/products')) {
-                Storage::makeDirectory('public/products');
+            $dirPath = storage_path('app/public/products');
+            if (!is_dir($dirPath)) {
+                mkdir($dirPath, 0755, true);
             }
+
+            $manager = new ImageManager(new Driver());
 
             foreach($request->file('photos') as $photo) {
                 // Hashing berbasis konten untuk menghindari duplikasi file di storage
@@ -55,9 +68,9 @@ class ProductController extends Controller
                 
                 // Cek apakah file dengan hash ini sudah ada (Deduplikasi)
                 if (!file_exists($imgPath)) {
-                    $img = Image::read($photo);
+                    $img = $manager->decode($photo->getRealPath());
                     $img->scale(width: 1200);
-                    $img->toWebp(80)->save($imgPath);
+                    $img->encode(new WebpEncoder(80))->save($imgPath);
                 }
                 
                 $images[] = $finalName;
@@ -69,7 +82,6 @@ class ProductController extends Controller
             'name' => $request->name,
             'category' => $request->category,
             'description' => $request->description,
-            'price' => $request->price,
             'images' => $images, // Array path foto 
             'links' => $request->links ?? [], // Array link marketplace dinamis
         ]);
@@ -98,10 +110,32 @@ class ProductController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
+        ], [
+            'photos.*.image' => 'File harus berupa gambar.',
+            'photos.*.mimes' => 'Format gambar harus jpeg, png, jpg, atau webp.',
+            'photos.*.max' => 'Ukuran maksimal tiap gambar adalah 5MB.',
         ]);
+
+        $existingCount = is_array($product->images) ? count($product->images) : 0;
+        $uploadedCount = $request->hasFile('photos') ? count($request->file('photos')) : 0;
+        $totalCount = $existingCount + $uploadedCount;
+
+        if ($totalCount < 3) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['photos' => 'Total foto produk setelah pembaruan minimal harus 3 foto agar bisa ditampilkan dalam slider. Saat ini hanya ada ' . $totalCount . ' foto.']);
+        }
 
         $images = $product->images ?? [];
         if($request->hasFile('photos')) {
+            // Pastikan direktori ada
+            $dirPath = storage_path('app/public/products');
+            if (!is_dir($dirPath)) {
+                mkdir($dirPath, 0755, true);
+            }
+
+            $manager = new ImageManager(new Driver());
             foreach($request->file('photos') as $photo) {
                 $hash = md5_file($photo->getRealPath());
                 $finalName = $hash . '.webp';
@@ -109,9 +143,9 @@ class ProductController extends Controller
                 $imgPath = storage_path('app/public/products/' . $finalName);
                 
                 if (!file_exists($imgPath)) {
-                    $img = Image::read($photo);
+                    $img = $manager->decode($photo->getRealPath());
                     $img->scale(width: 1200);
-                    $img->toWebp(80)->save($imgPath);
+                    $img->encode(new WebpEncoder(80))->save($imgPath);
                 }
                 
                 $images[] = $finalName;
@@ -122,7 +156,6 @@ class ProductController extends Controller
             'name' => $request->name,
             'category' => $request->category,
             'description' => $request->description,
-            'price' => $request->price,
             'images' => $images,
             'links' => $request->links ?? $product->links,
         ]);

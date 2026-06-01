@@ -72,22 +72,22 @@ class PublicCatalogController extends Controller
             ->sort()
             ->values();
 
+        // Fetch active events
+        $events = \App\Models\Event::where('status', 'active')
+            ->orderBy('_id', -1)
+            ->get();
+
         return view('catalog.index', compact(
             'products', 'categories', 'cities',
-            'selectedCategory', 'selectedCity', 'isFavoriteFilter'
+            'selectedCategory', 'selectedCity', 'isFavoriteFilter', 'events'
         ));
     }
 
     /**
-     * Halaman detail produk — BUTUH LOGIN sebagai buyer.
+     * Halaman detail produk — Dapat diakses oleh tamu/guest maupun pembeli.
      */
     public function show($productId)
     {
-        // Gate: harus login
-        if (!auth()->check()) {
-            return redirect()->route('login')
-                ->with('status', 'Silakan masuk atau daftar akun untuk melihat detail produk dan menghubungi UMKM.');
-        }
 
         $product = Product::findOrFail($productId);
         $store   = Store::find($product->store_id);

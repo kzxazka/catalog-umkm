@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Portal UMKM') }} - Dashboard</title>
+    <title>{{ config('app.name', 'galeriukmbdl') }} - Dashboard</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/disperdaglogo.png') }}" />
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -74,6 +75,16 @@
         [x-cloak] { display: none !important; }
         .popup-enter { animation: popIn .15s ease-out; }
         @keyframes popIn { from { opacity: 0; transform: scale(.95) translateY(-4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        /* Premium Shimmer Loading Skeleton */
+        .shimmer-bg {
+            background: linear-gradient(90deg, #eff4ff 25%, #d3e4fe 50%, #eff4ff 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.6s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

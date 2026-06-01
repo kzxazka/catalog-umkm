@@ -24,8 +24,8 @@ body{font-family:'Segoe UI',sans-serif;background:#f8f9ff;margin:0;padding:20px}
         <h2>Halo, {{ $application->user->name ?? 'Mitra' }}!</h2>
         <p>Pengajuan kemitraan Anda telah <strong>disetujui</strong> oleh Tim Dinas Perdagangan. Usaha Anda telah resmi bergabung sebagai mitra UMKM.</p>
         <div class="store-name">🏪 {{ $application->business_name }}</div>
-        <p>Akun toko Anda akan segera dibuat oleh tim admin. Anda akan menerima kredensial login melalui email terpisah. Silakan pantau kotak masuk Anda.</p>
-        <a href="{{ url('/catalog') }}" class="btn">Lihat Portal UMKM</a>
+        <p>Akun Anda kini telah otomatis di-upgrade menjadi <strong>Owner (Mitra UMKM)</strong> dan toko Anda telah aktif. Anda dapat langsung masuk ke dashboard menggunakan email &amp; password yang Anda daftarkan sebelumnya (atau masuk dengan akun Google) untuk mulai mengelola produk toko Anda.</p>
+        <a href="{{ url('/dashboard') }}" class="btn">Masuk ke Dashboard Toko</a>
     </div>
     <div class="footer">
         Email otomatis dari Portal UMKM Dinas Perdagangan · <a href="{{ url('/') }}">portalumkm.go.id</a>

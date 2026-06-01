@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
 
         // Seed Superadmin Dinas Perdagangan
         User::updateOrCreate(
-            ['email' => 'admin@disperdagkota.go.id'],
+            ['email' => 'perdaganganbl@gmail.com'],
             [
                 'name' => 'Dinas Perdagangan',
-                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'password' => \Illuminate\Support\Facades\Hash::make('@Herl1n4PW'),
                 'role' => 'admin',
             ]
         );
