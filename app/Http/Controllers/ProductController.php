@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    // Tampilkan daftar produk milik UMKM
     public function index()
     {
         // Isolasi Data: Hanya ambil produk yang store_id-nya sama dengan toko milik user yang sedang login
@@ -23,7 +22,8 @@ class ProductController extends Controller
 
         // Filter berdasarkan store_id
         $products = Product::where('store_id', $store->id)->orderBy('_id', -1)->get();
-        return view('products.index', compact('products'));
+        $storeCategory = $store->category ?? 'Fashion';
+        return view('owner.products', compact('products', 'storeCategory'));
     }
 
     // Form tambah produk

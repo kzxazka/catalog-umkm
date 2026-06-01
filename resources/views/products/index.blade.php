@@ -1,67 +1,193 @@
+@php
+    $store = auth()->user()->store;
+    $storeCategory = $store ? ($store->category ?? 'Fashion') : 'Fashion';
+
+    // Mapping Kategori Toko -> List Kategori Produk
+    $categoryMapping = [
+        'Fashion' => [
+            'Koleksi Pria',
+            'Koleksi Wanita',
+            'Koleksi Anak',
+            'Alas Kaki & Sepatu',
+            'Tas & Dompet',
+            'Aksesoris',
+            'Lainnya'
+        ],
+        'Food & Beverage' => [
+            'Makanan Berat',
+            'Makanan Ringan & Cemilan',
+            'Minuman',
+            'Bahan & Bumbu',
+            'Kue & Roti',
+            'Makanan Beku (Frozen)',
+            'Lainnya'
+        ],
+        'Healthy Product' => [
+            'Suplemen & Vitamin',
+            'Herbal & Tradisional',
+            'Perawatan Tubuh (Bodycare)',
+            'Makanan Sehat & Diet',
+            'Lainnya'
+        ],
+        'Other' => [
+            'Kriya & Kerajinan',
+            'Aksesoris & Perhiasan',
+            'Jasa & Layanan',
+            'Elektronik & Rumah Tangga',
+            'Lainnya'
+        ],
+    ];
+
+    $productCategories = $categoryMapping[$storeCategory] ?? ['Umum', 'Lainnya'];
+@endphp
+
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Produk Toko Anda') }}
-            </h2>
-            <a href="{{ route('products.create') }}" class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold hover:bg-indigo-700 transition">
-                + Tambah Produk
-            </a>
-        </div>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                @if(session('success'))
-                    <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if(session('error'))
-                    <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    @forelse ($products as $product)
-                        <div class="border dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-300">
-                            @if(isset($product->images) && is_array($product->images) && count($product->images) > 0)
-                                <img src="{{ asset('storage/products/' . $product->images[0]) }}" alt="{{ $product->name }}" class="w-full h-48 object-cover">
-                            @else
-                                <div class="w-full h-48 bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-500 text-sm">Tanpa Gambar</div>
-                            @endif
-                            
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg dark:text-white truncate" title="{{ $product->name }}">{{ $product->name }}</h3>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">{{ $product->category ?? 'Tanpa Kategori' }}</p>
-
-                                
-                                <div class="flex gap-2">
-                                    <a href="{{ route('products.edit', $product->id) }}" class="flex-1 text-center bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-300 px-3 py-1.5 rounded text-sm font-medium transition">Edit</a>
-                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="flex-1" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini secara permanen?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="w-full bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400 px-3 py-1.5 rounded text-sm font-medium transition">Hapus</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-span-full flex flex-col items-center justify-center py-16 text-center">
-                            <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Belum ada produk</h3>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Mulailah dengan menambahkan produk pertama untuk toko Anda.</p>
-                            <a href="{{ route('products.create') }}" class="mt-6 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                                + Tambah Produk
-                            </a>
-                        </div>
-                    @endforelse
-                </div>
-
+    <div x-data="productManager({{ json_encode($products) }})" class="space-y-6">
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
+            <div>
+                <h1 class="font-headline-lg text-3xl font-bold text-primary mb-1">Daftar Produk</h1>
+                <p class="font-body-md text-on-surface-variant">
+                    Kelola katalog produk dan tautan eksternal toko Anda (Kategori Toko: 
+                    <span class="font-bold text-primary text-xs uppercase tracking-wider bg-primary/10 px-2 py-0.5 rounded">{{ $storeCategory }}</span>).
+                </p>
+            </div>
+            <div>
+                <a href="{{ route('products.create') }}"
+                    class="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container rounded-xl font-bold text-sm transition-all shadow-sm">
+                    <span class="material-symbols-outlined text-[20px]">add</span>
+                    <span>Tambah Produk</span>
+                </a>
             </div>
         </div>
+
+        {{-- Session Notifications --}}
+        @if(session('success'))
+        <div class="flex items-center gap-3 bg-green-50 border border-green-200 rounded-xl p-4 shadow-sm" x-data x-init="setTimeout(() => $el.remove(), 5000)">
+            <span class="material-symbols-outlined text-green-600" style="font-size:22px">check_circle</span>
+            <p class="text-sm font-semibold text-green-800">{{ session('success') }}</p>
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+            <span class="material-symbols-outlined text-red-600" style="font-size:22px">error</span>
+            <p class="text-sm font-semibold text-red-800">{{ session('error') }}</p>
+        </div>
+        @endif
+
+        <!-- Filter & Search Bar -->
+        <div class="flex flex-col sm:flex-row justify-between gap-4 bg-surface border border-outline-variant p-4 rounded-xl shadow-sm">
+            <div class="relative w-full sm:w-96">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-size: 18px;">search</span>
+                <input type="text" x-model="searchQuery" placeholder="Cari nama produk..."
+                    class="w-full pl-9 pr-4 py-2 bg-surface-container border border-outline-variant rounded-lg text-sm focus:border-primary focus:ring-1 focus:ring-primary transition-all text-on-surface">
+            </div>
+            <div class="flex gap-2">
+                <select x-model="selectedCategory"
+                    class="px-4 py-2 bg-surface border border-outline-variant rounded-lg text-sm font-bold text-on-surface hover:bg-surface-variant transition-colors focus:ring-primary focus:border-primary cursor-pointer">
+                    <option value="Semua Kategori">Semua Kategori</option>
+                    @foreach($productCategories as $cat)
+                        <option value="{{ $cat }}">{{ $cat }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+            <!-- Card: Add New Product -->
+            <a href="{{ route('products.create') }}"
+                class="bg-surface border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center p-8 hover:bg-surface-container-low hover:border-primary transition-all cursor-pointer min-h-[340px] group text-center">
+                <div class="w-14 h-14 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-[28px]">add</span>
+                </div>
+                <p class="font-bold text-on-surface mb-1 group-hover:text-primary transition-colors text-base">Tambah Produk</p>
+                <p class="text-xs text-on-surface-variant leading-relaxed max-w-[200px]">Masukkan produk baru ke dalam katalog etalase toko Anda</p>
+            </a>
+
+            <!-- Dynamic Product Cards -->
+            <template x-for="product in filteredProducts" :key="product._id">
+                <div class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[340px]">
+                    <div>
+                        <!-- Product Photo / Cover -->
+                        <div class="relative w-full h-48 bg-surface-container-low overflow-hidden group">
+                            <template x-if="product.images && product.images.length > 0">
+                                <img :src="'/storage/products/' + product.images[0]" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </template>
+                            <template x-if="!product.images || product.images.length === 0">
+                                <div class="w-full h-full flex flex-col items-center justify-center text-on-surface-variant bg-surface-container-low gap-2">
+                                    <span class="material-symbols-outlined text-[36px]">image_not_supported</span>
+                                    <span class="text-xs font-semibold">Tanpa Gambar</span>
+                                </div>
+                            </template>
+                            <span class="absolute top-3 right-3 px-2 py-0.5 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold rounded uppercase tracking-wider" x-text="product.category || 'Lainnya'"></span>
+                        </div>
+
+                        <!-- Product Content Details -->
+                        <div class="p-4 space-y-2">
+                            <h3 class="font-bold text-base text-on-surface line-clamp-1" :title="product.name" x-text="product.name"></h3>
+                            <p class="text-xs text-on-surface-variant line-clamp-3 leading-relaxed" x-text="product.description || 'Tidak ada deskripsi.'"></p>
+                            
+                            <!-- Badges for active links -->
+                            <div class="flex flex-wrap gap-1.5 pt-2">
+                                <template x-for="link in (product.links || [])">
+                                    <span class="px-2 py-0.5 bg-primary/5 text-primary border border-primary/10 text-[9px] font-bold rounded flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[10px]">link</span>
+                                        <span x-text="link.platform"></span>
+                                    </span>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Actions Footer -->
+                    <div class="p-4 border-t border-outline-variant flex gap-2 bg-surface-container-lowest">
+                        <a :href="'/products/' + product._id + '/edit'" 
+                            class="flex-1 flex items-center justify-center gap-1 py-2 bg-surface border border-outline text-primary hover:bg-primary/5 rounded-lg text-xs font-bold transition-colors">
+                            <span class="material-symbols-outlined text-sm">edit</span>
+                            <span>Edit</span>
+                        </a>
+                        
+                        <form :action="'/products/' + product._id" method="POST" class="flex-1" 
+                            @submit.prevent="if (confirm('Apakah Anda yakin ingin menghapus produk ini secara permanen?')) $el.submit()">
+                            @csrf
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" 
+                                class="w-full flex items-center justify-center gap-1 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold transition-colors">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                                <span>Hapus</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </template>
+
+        </div>
+
+        <!-- No Products Found State -->
+        <div x-show="filteredProducts.length === 0 && searchQuery !== ''" class="flex flex-col items-center justify-center py-12 text-center bg-surface border border-outline-variant rounded-xl p-8" style="display: none;">
+            <span class="material-symbols-outlined text-5xl text-on-surface-variant mb-3">search_off</span>
+            <h3 class="text-base font-bold text-on-surface">Tidak ada produk ditemukan</h3>
+            <p class="text-xs text-on-surface-variant mt-1">Coba cari dengan kata kunci lain atau ubah filter kategori Anda.</p>
+        </div>
     </div>
+
+    <script>
+        function productManager(productsJson) {
+            return {
+                products: productsJson || [],
+                searchQuery: '',
+                selectedCategory: 'Semua Kategori',
+                get filteredProducts() {
+                    return this.products.filter(p => {
+                        const matchesSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        const matchesCat = this.selectedCategory === 'Semua Kategori' || p.category === this.selectedCategory;
+                        return matchesSearch && matchesCat;
+                    });
+                }
+            }
+        }
+    </script>
 </x-app-layout>

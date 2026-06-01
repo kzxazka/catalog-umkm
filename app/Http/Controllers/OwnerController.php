@@ -12,7 +12,12 @@ class OwnerController extends Controller
         $store = $user->store;
         $storeCategory = $store ? ($store->category ?? 'Fashion') : 'Fashion';
 
-        return view('owner.products', compact('storeCategory'));
+        $products = [];
+        if ($store) {
+            $products = \App\Models\Product::where('store_id', $store->id)->orderBy('_id', -1)->get();
+        }
+
+        return view('owner.products', compact('storeCategory', 'products'));
     }
 
     public function links()
