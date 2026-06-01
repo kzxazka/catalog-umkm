@@ -17,7 +17,51 @@ class OwnerController extends Controller
 
     public function links()
     {
-        return view('owner.links');
+        $user = auth()->user();
+        $store = $user->store;
+        return view('owner.links', compact('store'));
+    }
+
+    public function updateLinks(Request $request)
+    {
+        $user = auth()->user();
+        $store = $user->store;
+
+        if (!$store) {
+            return redirect()->back()->with('error', 'Toko tidak ditemukan. Hubungi Admin.');
+        }
+
+        $request->validate([
+            'whatsapp'  => 'nullable|string|max:20',
+            'instagram' => 'nullable|string|max:100',
+            'shopee'    => 'nullable|url|max:255',
+            'tokopedia' => 'nullable|url|max:255',
+        ]);
+
+        $wa = $request->whatsapp;
+        if (!empty($wa)) {
+            $wa = preg_replace('/[^0-9]/', '', $wa);
+            if (str_starts_with($wa, '62')) {
+                $wa = substr($wa, 2);
+            } elseif (str_starts_with($wa, '0')) {
+                $wa = substr($wa, 1);
+            }
+        }
+
+        $socialLinks = [
+            'instagram' => $request->instagram ? 'https://instagram.com/' . ltrim(parse_url($request->instagram, PHP_URL_PATH) ?: $request->instagram, '/') : null,
+            'shopee'    => $request->shopee,
+            'tokopedia' => $request->tokopedia,
+            'whatsapp'  => $wa ? 'https://wa.me/62' . $wa : null,
+        ];
+
+        $store->update([
+            'whatsapp'     => $wa,
+            'instagram'    => $request->instagram,
+            'social_links' => $socialLinks,
+        ]);
+
+        return redirect()->back()->with('success', 'Tautan media sosial & marketplace berhasil diperbarui!');
     }
 
     public function settings()

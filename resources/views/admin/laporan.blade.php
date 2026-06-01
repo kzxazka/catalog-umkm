@@ -53,8 +53,8 @@
             <div class="text-center flex-grow">
                 <h2 class="text-xl font-bold uppercase">Pemerintah Kota Bandar Lampung</h2>
                 <h1 class="text-2xl font-black uppercase tracking-wider">Dinas Perdagangan Kota Bandar Lampung</h1>
-                <p class="text-xs text-gray-600 mt-1">Jl. Cut Mutia No.44, Teluk Betung, Bandar Lampung | Telp: (0721) 1234567</p>
-                <p class="text-[10px] text-gray-500">Surel: disdag@bandarlampungkota.go.id | Kode Pos: 35114</p>
+                <p class="text-xs text-gray-600 mt-1">Jl. Antara No.42, Klp. Tiga, Kec. Tj. Karang Pusat, Kota Bandar Lampung, Lampung 35119 | Telp: (0721) 456-7890</p>
+                <p class="text-[10px] text-gray-500">Surel: diskominfo@bandarlampungkota.go.id, perdaganganbl@gmail.com | IG: @dinasperdagangan_bandarlampung</p>
             </div>
         </div>
 

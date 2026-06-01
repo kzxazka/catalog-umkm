@@ -124,6 +124,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class);
     Route::get('/owner/products', [\App\Http\Controllers\OwnerController::class, 'products'])->name('owner.products');
     Route::get('/owner/links', [\App\Http\Controllers\OwnerController::class, 'links'])->name('owner.links');
+    Route::post('/owner/links', [\App\Http\Controllers\OwnerController::class, 'updateLinks'])->name('owner.links.update');
     Route::get('/owner/settings', [\App\Http\Controllers\OwnerController::class, 'settings'])->name('owner.settings');
     Route::post('/owner/settings', [\App\Http\Controllers\OwnerController::class, 'updateSettings'])->name('owner.settings.update');
 

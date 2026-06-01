@@ -46,9 +46,11 @@
                 <div>
                     <h4 class="font-bold text-lg mb-4 uppercase tracking-wider">Informasi Kontak Dinas</h4>
                     <ul class="text-sm text-gray-400 space-y-2">
-                        <li>📍 Jl. Cut Mutia No.44, Teluk Betung, Bandar Lampung</li>
-                        <li>📞 (0721) 1234567 (Call Center)</li>
-                        <li>✉️ disdag@bandarlampungkota.go.id</li>
+                        <li>📍 Jl. Antara No.42, Klp. Tiga, Kec. Tj. Karang Pusat, Kota Bandar Lampung, Lampung 35119</li>
+                        <li>📞 (0721) 456-7890</li>
+                        <li>📸 @dinasperdagangan_bandarlampung</li>
+                        <li>✉️ diskominfo@bandarlampungkota.go.id</li>
+                        <li>✉️ perdaganganbl@gmail.com</li>
                         <li class="mt-4 text-indigo-400 font-semibold cursor-pointer hover:text-white transition">Layanan Pengaduan Konsumen &rarr;</li>
                     </ul>
                 </div>
