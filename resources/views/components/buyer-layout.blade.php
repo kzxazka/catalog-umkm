@@ -186,7 +186,7 @@
 
                     {{-- Menu items --}}
                     <div class="py-1">
-                        <a href="{{ route('buyer.profile') }}" @click="profileOpen = false"
+                        <a href="{{ route('profile.edit') }}" @click="profileOpen = false"
                            class="flex items-center gap-3 px-4 py-2.5 hover:bg-surface-container-low text-on-surface text-sm transition-colors">
                             <span class="material-symbols-outlined text-on-surface-variant" style="font-size:19px">person</span>
                             <span class="font-semibold">Profil Saya</span>
@@ -247,8 +247,8 @@
             <span class="text-[10px] font-bold">Katalog</span>
         </a>
         @auth
-        <a href="{{ route('buyer.profile') }}"
-           class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors {{ $cr === 'buyer.profile' ? 'text-primary' : 'text-on-surface-variant' }}">
+        <a href="{{ route('catalog.index') }}?filter=favorit"
+           class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors {{ request()->get('filter') === 'favorit' ? 'text-primary' : 'text-on-surface-variant' }}">
             <span class="material-symbols-outlined" style="font-size:22px">favorite</span>
             <span class="text-[10px] font-bold">Favorit</span>
         </a>
@@ -257,8 +257,8 @@
             <span class="material-symbols-outlined" style="font-size:22px">verified_user</span>
             <span class="text-[10px] font-bold">Mitra</span>
         </a>
-        <a href="{{ route('buyer.profile') }}"
-           class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors {{ $cr === 'buyer.profile' ? 'text-primary' : 'text-on-surface-variant' }}">
+        <a href="{{ route('profile.edit') }}"
+           class="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors {{ $cr === 'profile.edit' ? 'text-primary' : 'text-on-surface-variant' }}">
             <span class="material-symbols-outlined" style="font-size:22px">person</span>
             <span class="text-[10px] font-bold">Profil</span>
         </a>

@@ -3,7 +3,7 @@
 
     {{-- Header --}}
     <div class="flex items-center gap-3 mb-6">
-        <a href="{{ route('buyer.profile') }}"
+        <a href="{{ route('catalog.index') }}"
            class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-content hover:bg-surface-container-high transition-colors flex items-center justify-center">
             <span class="material-symbols-outlined text-on-surface-variant" style="font-size:20px">arrow_back</span>
         </a>

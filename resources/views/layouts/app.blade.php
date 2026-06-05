@@ -220,11 +220,6 @@
                 <span class="material-symbols-outlined" style="font-size:22px">inventory_2</span>
                 <span class="text-[10px] font-bold">Produk</span>
             </a>
-            <a href="{{ route('owner.chat.inbox') }}"
-               class="flex-1 flex flex-col items-center justify-center py-2.5 gap-0.5 {{ str_starts_with($cr, 'owner.chat') ? 'text-primary' : 'text-on-surface-variant' }} transition-colors">
-                <span class="material-symbols-outlined" style="font-size:22px">forum</span>
-                <span class="text-[10px] font-bold">Chat</span>
-            </a>
             <a href="{{ route('owner.settings') }}"
                class="flex-1 flex flex-col items-center justify-center py-2.5 gap-0.5 {{ $cr === 'owner.settings' ? 'text-primary' : 'text-on-surface-variant' }} transition-colors">
                 <span class="material-symbols-outlined" style="font-size:22px">settings</span>
