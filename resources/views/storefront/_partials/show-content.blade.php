@@ -1,5 +1,5 @@
     {{-- ═══════════ STORE HERO / HEADER ═══════════ --}}
-    <div class="relative" x-data="{ following: {{ $isFollowing ? 'true' : 'false' }} }">
+    <div class="relative">
         @if($store->header_image)
         <div class="h-36 md:h-52 overflow-hidden">
             <img src="{{ asset('storage/'.$store->header_image) }}" alt="{{ $store->name }}" class="w-full h-full object-cover" />
@@ -75,25 +75,7 @@
                                     {{ number_format($totalClicks) }} Interaksi
                                 </span>
 
-                                {{-- Follow button — hanya buyer --}}
-                                @auth
-                                @if(auth()->user()->role === 'buyer')
-                                <button
-                                    type="button"
-                                    @click="
-                                        fetch('{{ route('store.follow.toggle', $store->slug) }}', {
-                                            method: 'POST',
-                                            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json', 'Accept': 'application/json' }
-                                        }).then(r => r.json()).then(d => { following = d.following; });
-                                    "
-                                    :class="following ? 'bg-primary text-white' : 'bg-white border border-primary text-primary hover:bg-primary hover:text-white'"
-                                    class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full transition-all">
-                                    <span class="material-symbols-outlined" style="font-size:14px"
-                                          x-text="following ? 'person_check' : 'person_add'">person_add</span>
-                                    <span x-text="following ? 'Mengikuti' : 'Ikuti Toko'">{{ $isFollowing ? 'Mengikuti' : 'Ikuti Toko' }}</span>
-                                </button>
-                                @endif
-                                @endauth
+
                             </div>
 
                         </div>

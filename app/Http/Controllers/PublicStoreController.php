@@ -40,7 +40,7 @@ class PublicStoreController extends Controller
         })->take(4)->values();
 
         // Follow status
-        $isFollowing = auth()->check() ? auth()->user()->isFollowing((string) $store->id) : false;
+        $isFollowing = false;
 
         return view('storefront.show', compact(
             'store', 'products', 'allProducts', 'categories',
@@ -74,27 +74,5 @@ class PublicStoreController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     * Toggle follow toko — AJAX only, butuh login buyer.
-     */
-    public function toggleFollow(Request $request, $slug)
-    {
-        $user    = auth()->user();
-        $store   = Store::where('slug', $slug)->firstOrFail();
-        $storeId = (string) $store->id;
-        $follows = $user->followed_stores ?? [];
 
-        if (in_array($storeId, $follows)) {
-            $follows  = array_values(array_diff($follows, [$storeId]));
-            $following = false;
-        } else {
-            $follows[] = $storeId;
-            $following  = true;
-        }
-
-        $user->followed_stores = $follows;
-        $user->save();
-
-        return response()->json(['following' => $following, 'total' => count($follows)]);
-    }
 }
