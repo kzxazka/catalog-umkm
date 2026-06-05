@@ -96,25 +96,7 @@
         @auth
         <div class="flex items-center gap-1">
 
-            {{-- Chat —riwayat chat buyer --}}
-            <a href="{{ route('chat.buyer.inbox') }}"
-               title="Pesan Saya"
-               class="relative w-10 h-10 rounded-full flex items-center justify-center text-blue-200 hover:bg-white/10 hover:text-white transition-all">
-                <span class="material-symbols-outlined" style="font-size:22px">forum</span>
-            </a>
 
-            {{-- Favorit — hidden di mobile (ada di bottom nav), visible di desktop --}}
-            <a href="{{ route('catalog.index') }}?filter=favorit"
-               title="Produk Favorit"
-               class="relative hidden md:flex w-10 h-10 rounded-full items-center justify-center text-blue-200 hover:bg-white/10 hover:text-white transition-all">
-                <span class="material-symbols-outlined" style="font-size:22px">favorite</span>
-                @auth
-                @php $favCount = count(auth()->user()->favorited_products ?? []); @endphp
-                @if($favCount > 0)
-                <span class="absolute top-1 right-1 w-4 h-4 bg-secondary rounded-full text-[9px] font-black text-white flex items-center justify-center">{{ $favCount > 9 ? '9+' : $favCount }}</span>
-                @endif
-                @endauth
-            </a>
 
             {{-- Notifikasi --}}
             <div class="relative">
@@ -199,7 +181,7 @@
                                 </span>
                                 @else
                                 <span class="inline-flex items-center gap-1 bg-white/10 text-blue-200 text-[10px] font-bold px-2 py-0.5 rounded-full mt-1">
-                                    Buyer
+                                    Mitra Baru
                                 </span>
                                 @endif
                             </div>
@@ -208,11 +190,6 @@
 
                     {{-- Menu --}}
                     <div class="py-2">
-                        <a href="{{ route('buyer.profile') }}" @click="profileOpen = false"
-                           class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low text-on-surface text-sm transition-colors">
-                            <span class="material-symbols-outlined text-on-surface-variant" style="font-size:20px">person</span>
-                            <span class="font-semibold">Profil Saya</span>
-                        </a>
                         <a href="{{ route('mitra.status') }}" @click="profileOpen = false"
                            class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low text-on-surface text-sm transition-colors">
                             <span class="material-symbols-outlined text-on-surface-variant" style="font-size:20px">add_business</span>
@@ -254,7 +231,7 @@
                 Masuk
             </a>
             <a href="{{ route('register') }}" class="bg-secondary text-white text-sm font-bold px-4 py-2 rounded-lg hover:opacity-90 transition-opacity">
-                Daftar
+                Daftar Mitra
             </a>
         </div>
         @endauth
@@ -284,22 +261,10 @@
                     'active' => ($currentRoute === 'catalog.index' && $filter !== 'favorit')
                 ],
                 [
-                    'url' => route('catalog.index') . '?filter=favorit', 
-                    'icon' => 'favorite', 
-                    'label' => 'Favorit', 
-                    'active' => ($currentRoute === 'catalog.index' && $filter === 'favorit')
-                ],
-                [
-                    'url' => auth()->check() ? route('mitra.status') : route('login'), 
+                    'url' => auth()->check() ? route('dashboard') : route('login'), 
                     'icon' => 'verified_user', 
-                    'label' => 'Mitra', 
-                    'active' => str_starts_with($currentRoute ?? '', 'mitra')
-                ],
-                [
-                    'url' => auth()->check() ? route('buyer.profile') : route('login'), 
-                    'icon' => 'person', 
-                    'label' => 'Profil', 
-                    'active' => str_starts_with($currentRoute ?? '', 'buyer.profile')
+                    'label' => 'Mitra/Masuk', 
+                    'active' => str_starts_with($currentRoute ?? '', 'mitra') || $currentRoute === 'dashboard' || $currentRoute === 'login'
                 ],
             ];
         @endphp

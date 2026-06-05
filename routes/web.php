@@ -5,10 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PublicStoreController;
 use App\Http\Controllers\PublicCatalogController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\BuyerProfileController;
 use App\Http\Controllers\MitraController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\ProductInquiryController;
 use Illuminate\Support\Facades\Route;
 
 // Root → katalog publik
@@ -36,7 +33,7 @@ Route::get('/dashboard', function () {
         return redirect()->route('admin.verifikasi');
     }
     if ($user->role === 'buyer') {
-        return redirect()->route('catalog.index');
+        return redirect()->route($user->hasPendingMitraApplication() ? 'mitra.status' : 'mitra.register');
     }
     // UMKM Owner
     $store = $user->store;
@@ -73,29 +70,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // ── BUYER PROFILE ─────────────────────────────────────────
-    Route::get('/buyer/profile', [BuyerProfileController::class, 'show'])->name('buyer.profile');
-    Route::post('/buyer/profile', [BuyerProfileController::class, 'update'])->name('buyer.profile.update');
-    Route::post('/buyer/profile/password', [BuyerProfileController::class, 'updatePassword'])->name('buyer.profile.password');
-
     // ── MITRA ─────────────────────────────────────────────────
     Route::get('/mitra/daftar', [MitraController::class, 'create'])->name('mitra.register');
     Route::post('/mitra/daftar', [MitraController::class, 'store'])->name('mitra.store');
     Route::get('/mitra/status', [MitraController::class, 'status'])->name('mitra.status');
-
-    // ── FAVORIT & FOLLOW ──────────────────────────────────────
-    Route::post('/catalog/favorite/{productId}', [PublicCatalogController::class, 'toggleFavorite'])->name('catalog.favorite.toggle');
-    Route::post('/store/{slug}/follow', [PublicStoreController::class, 'toggleFollow'])->name('store.follow.toggle');
-
-    // ── PRODUCT INQUIRY (Tanya Produk) ────────────────────────
-    Route::post('/inquiry/{productId}', [ProductInquiryController::class, 'store'])->name('inquiry.store');
-    Route::get('/inquiries', [ProductInquiryController::class, 'buyerList'])->name('buyer.inquiries');
-
-    // ── CHAT — BUYER ──────────────────────────────────────────
-    Route::get('/chat', [ChatController::class, 'buyerInbox'])->name('chat.buyer.inbox');
-    Route::get('/chat/{storeSlug}', [ChatController::class, 'buyerChat'])->name('chat.buyer');
-    Route::post('/chat/{storeSlug}/send', [ChatController::class, 'buyerSend'])->name('chat.buyer.send');
-    Route::get('/chat/poll', [ChatController::class, 'poll'])->name('chat.poll');
 
     // ── ADMIN ─────────────────────────────────────────────────
     Route::get('/admin/verifikasi', [AdminController::class, 'verifikasi'])->name('admin.verifikasi');
@@ -127,15 +105,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/owner/links', [\App\Http\Controllers\OwnerController::class, 'updateLinks'])->name('owner.links.update');
     Route::get('/owner/settings', [\App\Http\Controllers\OwnerController::class, 'settings'])->name('owner.settings');
     Route::post('/owner/settings', [\App\Http\Controllers\OwnerController::class, 'updateSettings'])->name('owner.settings.update');
-
-    // Owner: Product Inquiries
-    Route::get('/owner/inquiries', [ProductInquiryController::class, 'ownerList'])->name('owner.inquiries');
-    Route::post('/owner/inquiries/{id}/reply', [ProductInquiryController::class, 'reply'])->name('owner.inquiry.reply');
-
-    // Owner: Live Chat
-    Route::get('/owner/chat', [ChatController::class, 'ownerInbox'])->name('owner.chat.inbox');
-    Route::get('/owner/chat/{buyerId}', [ChatController::class, 'ownerChat'])->name('owner.chat');
-    Route::post('/owner/chat/{buyerId}/send', [ChatController::class, 'ownerSend'])->name('owner.chat.send');
 });
 
 require __DIR__ . '/auth.php';

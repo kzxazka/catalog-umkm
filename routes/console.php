@@ -11,11 +11,9 @@ Artisan::command('deploy:clean-db', function () {
     $this->info('Starting database cleanup for deployment...');
 
     // Truncate other collections
-    $this->info('Truncating stores, products, chat_messages, product_inquiries, and mitra_applications...');
+    $this->info('Truncating stores, products, and mitra_applications...');
     \App\Models\Store::truncate();
     \App\Models\Product::truncate();
-    \App\Models\ChatMessage::truncate();
-    \App\Models\ProductInquiry::truncate();
     \App\Models\MitraApplication::truncate();
 
     // Preserve admin and delete others

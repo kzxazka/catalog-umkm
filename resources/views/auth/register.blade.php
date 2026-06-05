@@ -3,9 +3,9 @@
     <div class="mb-8 text-center md:text-left">
         <img alt="Logo Portal UMKM" class="h-14 w-auto mb-5 mx-auto md:mx-0"
             src="{{ asset('img/disperdaglogo.png') }}" />
-        <h1 class="font-headline-lg text-headline-lg text-primary mb-2">Daftar Akun Pengunjung</h1>
+        <h1 class="font-headline-lg text-headline-lg text-primary mb-2">Daftar Akun Mitra UMKM</h1>
         <p class="font-body-md text-body-md text-on-surface-variant">
-            Bergabung untuk mengakses detail produk dan menghubungi UMKM lokal.
+            Daftarkan usaha Anda di Galeri UKM BDL untuk mempromosikan produk secara resmi di bawah binaan Dinas Perdagangan.
         </p>
     </div>
 
@@ -18,13 +18,13 @@
         {{-- Nama Lengkap --}}
         <div>
             <label class="block font-label-md text-label-md text-on-surface mb-2" for="name">
-                Nama Lengkap
+                Nama Lengkap (Pemilik)
             </label>
             <input
                 class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-body-md bg-white text-on-surface"
                 id="name" name="name" type="text" value="{{ old('name') }}"
                 required autofocus autocomplete="name"
-                placeholder="Masukkan nama lengkap Anda" />
+                placeholder="Masukkan nama lengkap pemilik usaha" />
             <x-input-error :messages="$errors->get('name')" class="mt-2 text-error text-sm" />
         </div>
 
@@ -85,8 +85,7 @@
         <div class="bg-surface-container-low rounded-lg p-4 flex gap-3 items-start">
             <span class="material-symbols-outlined text-primary mt-0.5" style="font-size:18px;">info</span>
             <p class="font-label-sm text-label-sm text-on-surface-variant">
-                Akun yang didaftarkan di sini adalah akun <strong class="text-on-surface">Pengunjung / Buyer</strong>.
-                Akun pemilik UMKM hanya bisa dibuat oleh Admin Dinas Perdagangan.
+                Setelah pendaftaran akun berhasil, Anda akan diarahkan untuk melengkapi <strong class="text-on-surface">profil usaha dan berkas kelayakan kemitraan</strong> agar dapat diverifikasi oleh pihak dinas.
             </p>
         </div>
 
@@ -94,7 +93,7 @@
         <button
             class="w-full bg-secondary text-on-secondary py-4 rounded-lg font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all shadow-md"
             type="submit">
-            Buat Akun Pengunjung
+            Daftar Sebagai Mitra
         </button>
     </form>
 

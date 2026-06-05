@@ -26,8 +26,6 @@ class User extends Authenticatable
         'city',         // Kota/Kabupaten
         'district',     // Kecamatan
         'avatar_path',  // Path foto profil
-        'favorited_products', // Array product IDs yang difavoritkan
-        'followed_stores',    // Array store IDs yang di-follow
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -41,8 +39,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'favorited_products' => 'array',
-            'followed_stores'    => 'array',
         ];
     }
 
@@ -140,19 +136,5 @@ class User extends Authenticatable
             $initials .= strtoupper(substr($word, 0, 1));
         }
         return $initials;
-    }
-
-    // Helper: apakah produk ini sudah difavoritkan?
-    public function isFavorited(string $productId): bool
-    {
-        $favs = $this->favorited_products ?? [];
-        return in_array($productId, $favs);
-    }
-
-    // Helper: apakah sudah follow toko ini?
-    public function isFollowing(string $storeId): bool
-    {
-        $follows = $this->followed_stores ?? [];
-        return in_array($storeId, $follows);
     }
 }

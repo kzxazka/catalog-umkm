@@ -40,14 +40,14 @@ class RegisteredUserController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => 'buyer', // Pendaftaran publik selalu jadi buyer
+            'role'     => 'buyer', // Pendaftaran mitra baru (unverified)
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        // Buyer langsung ke katalog setelah daftar
-        return redirect()->route('catalog.index');
+        // Langsung arahkan ke form pendaftaran mitra
+        return redirect()->route('mitra.register');
     }
 }

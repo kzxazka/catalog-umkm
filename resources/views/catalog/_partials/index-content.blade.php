@@ -61,43 +61,62 @@
     </div>
     @endif
 
-    {{-- ═══════════ MITRA OFFER (hanya buyer non-mitra) ═══════════ --}}
-    @auth
-    @if(auth()->user()->role === 'buyer' && !auth()->user()->hasPendingMitraApplication() && !auth()->user()->isApprovedMitra())
-    <div class="bg-gradient-to-r from-primary to-primary-container rounded-2xl p-5 mb-5 flex items-start gap-4 relative overflow-hidden">
+    {{-- ═══════════ MITRA REGISTRATION PROMOTION / STATUS BANNER ═══════════ --}}
+    @guest
+    <div class="bg-gradient-to-r from-primary to-primary-container rounded-2xl p-5 mb-5 flex items-start gap-4 relative overflow-hidden shadow-sm">
         <div class="absolute -right-4 -bottom-4 opacity-10 text-[80px] select-none">🏪</div>
         <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
             <span class="material-symbols-outlined text-white" style="font-size:22px">add_business</span>
         </div>
         <div class="flex-1">
-            <h3 class="text-white font-black text-sm md:text-base mb-1">Punya Usaha? Buka Toko di Sini!</h3>
-            <p class="text-blue-200 text-xs md:text-sm mb-3 leading-relaxed">Bergabung sebagai Mitra UMKM Dinas Perdagangan — gratis & terverifikasi resmi.</p>
+            <h3 class="text-white font-black text-sm md:text-base mb-1">Punya Usaha UMKM? Gabung Jadi Mitra Kami!</h3>
+            <p class="text-blue-200 text-xs md:text-sm mb-3 leading-relaxed">Promosikan produk Anda secara resmi di bawah binaan Dinas Perdagangan Kota Bandar Lampung. Gratis & terverifikasi.</p>
             <div class="flex gap-2 flex-wrap">
-                <a href="{{ route('mitra.register') }}" class="bg-secondary text-white text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition-opacity">
+                <a href="{{ route('register') }}" class="bg-secondary text-white text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition-opacity">
                     Daftar Mitra Sekarang
                 </a>
-                <a href="{{ route('mitra.status') }}" class="border border-white/30 text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-white/10 transition-colors">
-                    Pelajari Lebih Lanjut
+                <a href="{{ route('login') }}" class="border border-white/30 text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-white/10 transition-colors">
+                    Masuk Mitra/Admin
                 </a>
             </div>
         </div>
     </div>
+    @else
+    @if(auth()->user()->role === 'buyer')
+        @if(auth()->user()->hasPendingMitraApplication())
+        <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-2xl p-5 mb-5 flex items-start gap-4 relative overflow-hidden shadow-sm">
+            <div class="absolute -right-4 -bottom-4 opacity-10 text-[80px] select-none">⏳</div>
+            <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+                <span class="material-symbols-outlined text-white" style="font-size:22px">hourglass_empty</span>
+            </div>
+            <div class="flex-1 text-white">
+                <h3 class="font-black text-sm md:text-base mb-1">Pengajuan Kemitraan Sedang Diproses</h3>
+                <p class="text-amber-100 text-xs md:text-sm mb-3 leading-relaxed">Berkas pendaftaran Anda sedang diverifikasi oleh Admin Dinas Perdagangan. Silakan pantau secara berkala.</p>
+                <div class="flex gap-2 flex-wrap">
+                    <a href="{{ route('mitra.status') }}" class="bg-white text-amber-700 text-xs font-bold px-4 py-2 rounded-xl hover:bg-amber-50 transition-colors">
+                        Lihat Status Pengajuan
+                    </a>
+                </div>
+            </div>
+        </div>
+        @else
+        <div class="bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl p-5 mb-5 flex items-start gap-4 relative overflow-hidden shadow-sm">
+            <div class="absolute -right-4 -bottom-4 opacity-10 text-[80px] select-none">📋</div>
+            <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+                <span class="material-symbols-outlined text-white" style="font-size:22px">assignment</span>
+            </div>
+            <div class="flex-1 text-white">
+                <h3 class="font-black text-sm md:text-base mb-1">Lengkapi Formulir Kemitraan UMKM</h3>
+                <p class="text-red-100 text-xs md:text-sm mb-3 leading-relaxed">Anda belum mengirimkan berkas pendaftaran mitra. Mohon lengkapi formulir pendaftaran agar dapat diverifikasi.</p>
+                <div class="flex gap-2 flex-wrap">
+                    <a href="{{ route('mitra.register') }}" class="bg-white text-red-700 text-xs font-bold px-4 py-2 rounded-xl hover:bg-red-50 transition-colors">
+                        Isi Formulir Sekarang
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endif
     @endif
-    @endauth
-
-    {{-- ═══════════ GATE BANNER (guest) ═══════════ --}}
-    @guest
-    <div class="bg-gradient-to-r from-orange-50 to-amber-50 border border-amber-200 rounded-2xl p-4 mb-5 flex items-center gap-3 flex-wrap">
-        <span class="material-symbols-outlined text-secondary" style="font-size:26px">lock_open</span>
-        <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-on-surface">Login untuk akses detail produk & kontak UMKM</p>
-            <p class="text-xs text-on-surface-variant">Daftar gratis → klik produk → hubungi langsung</p>
-        </div>
-        <div class="flex gap-2 shrink-0">
-            <a href="{{ route('register') }}" class="bg-secondary text-white text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition-opacity">Daftar</a>
-            <a href="{{ route('login') }}" class="border border-primary text-primary text-xs font-bold px-4 py-2 rounded-xl hover:bg-primary hover:text-white transition-all">Masuk</a>
-        </div>
-    </div>
     @endguest
 
     {{-- ═══════════ EVENT BANNER / SECTIONS ═══════════ --}}
@@ -162,11 +181,7 @@
     {{-- ═══════════ HEADER COUNTS ═══════════ --}}
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-sm font-bold text-on-surface">
-            @if(isset($isFavoriteFilter) && $isFavoriteFilter)
-                Produk Favorit Saya
-            @else
-                {{ $selectedCategory !== 'Semua' ? $selectedCategory : 'Semua Produk' }}
-            @endif
+            {{ $selectedCategory !== 'Semua' ? $selectedCategory : 'Semua Produk' }}
             @if($selectedCity) <span class="text-on-surface-variant font-normal">· {{ $selectedCity }}</span> @endif
         </h2>
         <span class="text-xs text-on-surface-variant">{{ $products->total() }} produk</span>
@@ -181,29 +196,7 @@
             $store = $product->store;
             $isFav = in_array((string) $product->id, array_map('strval', $userFavs));
         @endphp
-        <div class="relative bg-white rounded-2xl border border-outline-variant overflow-hidden group hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
-             x-data="{ fav: {{ $isFav ? 'true' : 'false' }} }">
-
-            {{-- Favorite Button (buyer yang sudah login) --}}
-            @auth
-            @if(auth()->user()->role === 'buyer')
-            <button
-                type="button"
-                @click.prevent="
-                    fetch('{{ route('catalog.favorite.toggle', $product->id) }}', {
-                        method: 'POST',
-                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json', 'Accept': 'application/json' }
-                    }).then(r => r.json()).then(d => { fav = d.favorited; });
-                "
-                :title="fav ? 'Hapus dari Favorit' : 'Tambah ke Favorit'"
-                class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm"
-                :class="fav ? 'bg-error text-white' : 'bg-white/80 text-on-surface-variant hover:bg-white hover:text-error'">
-                <span class="material-symbols-outlined transition-all"
-                      :style="fav ? 'font-size:17px; font-variation-settings: FILL 1, wght 600, GRAD 0, opsz 24' : 'font-size:17px'"
-                      style="font-size:17px">favorite</span>
-            </button>
-            @endif
-            @endauth
+        <div class="relative bg-white rounded-2xl border border-outline-variant overflow-hidden group hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
 
             <a href="{{ route('catalog.product', $product->id) }}" class="block" x-data="{ imgLoaded: false }">
                 <div class="relative aspect-square bg-surface-container overflow-hidden">
@@ -225,13 +218,6 @@
                     <div class="absolute top-2 left-2 bg-primary/90 backdrop-blur-sm text-white text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
                         <span class="material-symbols-outlined" style="font-size:9px">verified</span> Mitra
                     </div>
-                    @guest
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-3">
-                        <span class="text-white text-[11px] font-bold flex items-center gap-1">
-                            <span class="material-symbols-outlined" style="font-size:13px">lock</span> Login untuk detail
-                        </span>
-                    </div>
-                    @endguest
                 </div>
                 <div class="p-3">
                     @if($store)

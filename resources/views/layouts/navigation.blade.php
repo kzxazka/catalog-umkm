@@ -102,31 +102,7 @@
                 <span>Tautan Eksternal</span>
             </a>
 
-            <a href="{{ route('owner.chat.inbox') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all
-                      {{ request()->routeIs('owner.chat*') ? 'bg-primary text-white' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }}">
-                <span class="material-symbols-outlined" style="font-size:20px">forum</span>
-                <span>Live Chat</span>
-                @php
-                    try {
-                        $store = auth()->user()->store;
-                        $unread = $store ? \App\Models\ChatMessage::where('store_id', $store->id)->where('sender_role', 'buyer')->where('is_read', false)->count() : 0;
-                    } catch (\Exception $e) {
-                        $unread = 0;
-                    }
-                @endphp
-                @if($unread > 0)
-                    <span
-                        class="ml-auto px-2 py-0.5 bg-secondary text-white text-[10px] font-bold rounded-full">{{ $unread }}</span>
-                @endif
-            </a>
 
-            <a href="{{ route('owner.inquiries') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all
-                      {{ request()->routeIs('owner.inquiries') ? 'bg-primary text-white' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }}">
-                <span class="material-symbols-outlined" style="font-size:20px">help</span>
-                <span>Pertanyaan Produk</span>
-            </a>
 
             <a href="{{ route('owner.settings') }}"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all
