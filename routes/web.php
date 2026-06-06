@@ -107,4 +107,29 @@ Route::middleware('auth')->group(function () {
     Route::post('/owner/settings', [\App\Http\Controllers\OwnerController::class, 'updateSettings'])->name('owner.settings.update');
 });
 
+Route::get('/repair-symlink', function () {
+    $target = storage_path('app/public');
+    $shortcut = public_path('storage');
+    
+    if (is_link($shortcut)) {
+        @unlink($shortcut);
+    } elseif (is_dir($shortcut)) {
+        @rename($shortcut, $shortcut . '_backup_' . time());
+    }
+    
+    $result = false;
+    if (!file_exists($shortcut) && !is_link($shortcut)) {
+        $result = @symlink($target, $shortcut);
+    }
+    
+    return response()->json([
+        'target' => $target,
+        'shortcut' => $shortcut,
+        'exists_target' => file_exists($target),
+        'exists_shortcut' => file_exists($shortcut) || is_link($shortcut),
+        'result' => $result,
+        'message' => $result ? 'Symlink created successfully!' : 'Failed to create symlink. Shortcut might still exist or lack permissions.'
+    ]);
+});
+
 require __DIR__ . '/auth.php';
