@@ -42,18 +42,14 @@ class PublicCatalogController extends Controller
         $products = $query->orderBy('_id', -1)->paginate(24);
 
         // Daftar kategori unik
-        $categories = Product::whereNotNull('category')
-            ->where('category', '!=', '')
-            ->distinct()
-            ->pluck('category')
+        $categories = collect(Product::raw()->distinct('category'))
+            ->filter(fn($val) => !empty($val))
             ->sort()
             ->values();
 
         // Daftar kota unik dari semua toko (untuk filter lokasi)
-        $cities = Store::whereNotNull('city')
-            ->where('city', '!=', '')
-            ->distinct()
-            ->pluck('city')
+        $cities = collect(Store::raw()->distinct('city'))
+            ->filter(fn($val) => !empty($val))
             ->sort()
             ->values();
 

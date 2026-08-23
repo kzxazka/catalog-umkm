@@ -229,6 +229,7 @@
                                 <div x-show="!imgLoaded" class="absolute inset-0 shimmer-bg"></div>
                                 <img src="{{ asset('storage/products/' . $product->images[0]) }}" alt="{{ $product->name }}"
                                     loading="lazy" @load="imgLoaded = true"
+                                    x-init="if ($el.complete) imgLoaded = true"
                                     class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
                                     :class="imgLoaded ? 'opacity-100' : 'opacity-0'"
                                     onerror="imgLoaded = true; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-surface-container-high\'><span class=\'material-symbols-outlined text-outline-variant\' style=\'font-size:28px\'>image</span></div>'" />

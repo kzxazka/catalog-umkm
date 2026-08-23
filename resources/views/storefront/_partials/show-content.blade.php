@@ -145,6 +145,7 @@
                         <div x-show="!imgLoaded" class="absolute inset-0 shimmer-bg z-10"></div>
                         <img src="{{ asset('storage/products/'.$p->images[0]) }}" alt="{{ $p->name }}"
                              @load="imgLoaded = true"
+                             x-init="if ($el.complete) imgLoaded = true"
                              class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
                              :class="imgLoaded ? 'opacity-100' : 'opacity-0'" loading="lazy"
                              onerror="imgLoaded = true" />
@@ -186,6 +187,7 @@
                         <div x-show="!imgLoaded" class="absolute inset-0 shimmer-bg z-10"></div>
                         <img src="{{ asset('storage/products/'.$p->images[0]) }}" alt="{{ $p->name }}"
                              @load="imgLoaded = true"
+                             x-init="if ($el.complete) imgLoaded = true"
                              class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
                              :class="imgLoaded ? 'opacity-100' : 'opacity-0'" loading="lazy"
                              onerror="imgLoaded = true" />
@@ -253,6 +255,7 @@
                     <div x-show="!imgLoaded" class="absolute inset-0 shimmer-bg z-10"></div>
                     <img src="{{ asset('storage/products/'.$product->images[0]) }}" alt="{{ $product->name }}"
                          @load="imgLoaded = true"
+                         x-init="if ($el.complete) imgLoaded = true"
                          class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
                          :class="imgLoaded ? 'opacity-100' : 'opacity-0'" loading="lazy"
                          onerror="imgLoaded = true" />
